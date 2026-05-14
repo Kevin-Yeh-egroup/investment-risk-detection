@@ -4,7 +4,7 @@ import { motion } from 'framer-motion'
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts'
 import { Button } from '@/components/ui/button'
 import { calculateScores, determineResultType, ResultType } from '@/lib/questions'
-import { RefreshCcw, ChevronDown } from 'lucide-react'
+import { Bot, ClipboardList, NotebookPen, RefreshCcw, Sparkles, WalletCards } from 'lucide-react'
 
 interface ResultSectionProps {
   answers: Record<number, number>
@@ -19,9 +19,52 @@ const dimensionLabels: Record<string, string> = {
   investment_anxiety: '焦慮管理',
 }
 
+const nextActions = [
+  {
+    title: '進行其他財務檢測',
+    description: '從不同面向整理目前的財務狀態。',
+    icon: ClipboardList,
+  },
+  {
+    title: '問問AI',
+    description: '把剛剛想到的問題，先用簡單方式問清楚。',
+    icon: Bot,
+  },
+  {
+    title: '免費線上財務諮詢',
+    description: '需要有人一起討論時，可以預約諮詢。',
+    icon: WalletCards,
+  },
+  {
+    title: '開始記錄我的財務',
+    description: '用記錄看見收入、支出與生活壓力的變化。',
+    icon: NotebookPen,
+  },
+]
+
+const resultIllustrations: Record<string, { src: string; alt: string }> = {
+  emotional: {
+    src: '/容易被市場情緒影響型.png',
+    alt: '容易被市場情緒影響型插圖',
+  },
+  stressed: {
+    src: '/壓力承受型.png',
+    alt: '壓力承受型投資者插圖',
+  },
+  fomo: {
+    src: '/跟風焦慮型.png',
+    alt: '跟風焦慮型插圖',
+  },
+  stable: {
+    src: '/穩定觀察型.png',
+    alt: '穩定觀察型插圖',
+  },
+}
+
 export function ResultSection({ answers, onRestart }: ResultSectionProps) {
   const scores = calculateScores(answers)
   const resultType = determineResultType(scores)
+  const resultIllustration = resultIllustrations[resultType.id]
 
   const radarData = [
     { dimension: '財務安全感', value: scores.financial_security, fullMark: 100 },
@@ -58,11 +101,62 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
           </h1>
         </motion.div>
 
+        {/* Result Type */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+          className="bg-card border border-border rounded-2xl p-8 md:p-10 mb-8"
+        >
+          <div className="text-center mb-8">
+            {resultIllustration && (
+              <div className="mx-auto mb-8 max-w-[360px] overflow-hidden rounded-[2rem] bg-secondary shadow-lg shadow-primary/10">
+                <img
+                  src={resultIllustration.src}
+                  alt={resultIllustration.alt}
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+            )}
+            <span className="text-xs text-primary tracking-widest uppercase mb-3 block">
+              你的投資狀態類型
+            </span>
+            <h2 className="text-2xl md:text-3xl font-light">{resultType.title}</h2>
+          </div>
+
+          <p className="text-muted-foreground leading-relaxed mb-8 text-center">
+            {resultType.description}
+          </p>
+
+          <div className="space-y-4 mb-8">
+            <h3 className="text-sm text-muted-foreground uppercase tracking-wider">主要特徵</h3>
+            <ul className="space-y-3">
+              {resultType.features.map((feature, index) => (
+                <motion.li
+                  key={index}
+                  initial={{ opacity: 0, x: -20 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  transition={{ delay: 0.3 + index * 0.1 }}
+                  className="flex items-start gap-3"
+                >
+                  <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0" />
+                  <span className="text-foreground/90">{feature}</span>
+                </motion.li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="border-t border-border pt-8">
+            <h3 className="text-sm text-muted-foreground uppercase tracking-wider mb-4">建議</h3>
+            <p className="text-foreground/90 leading-relaxed">{resultType.suggestion}</p>
+          </div>
+        </motion.div>
+
         {/* Radar Chart */}
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          transition={{ delay: 0.2, duration: 0.6 }}
+          transition={{ delay: 0.4, duration: 0.6 }}
           className="bg-card border border-border rounded-2xl p-6 md:p-8 mb-8"
         >
           <h2 className="text-lg font-medium mb-6 text-center">五維風險覺察分析</h2>
@@ -94,48 +188,6 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
           <div className="text-center mt-4">
             <span className="text-muted-foreground text-sm">整體穩定度</span>
             <p className="text-3xl font-light text-primary mt-1">{overallScore}%</p>
-          </div>
-        </motion.div>
-
-        {/* Result Type */}
-        <motion.div
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.4, duration: 0.6 }}
-          className="bg-card border border-border rounded-2xl p-8 md:p-10 mb-8"
-        >
-          <div className="text-center mb-8">
-            <span className="text-xs text-primary tracking-widest uppercase mb-3 block">
-              你的投資狀態類型
-            </span>
-            <h2 className="text-2xl md:text-3xl font-light">{resultType.title}</h2>
-          </div>
-
-          <p className="text-muted-foreground leading-relaxed mb-8 text-center">
-            {resultType.description}
-          </p>
-
-          <div className="space-y-4 mb-8">
-            <h3 className="text-sm text-muted-foreground uppercase tracking-wider">主要特徵</h3>
-            <ul className="space-y-3">
-              {resultType.features.map((feature, index) => (
-                <motion.li
-                  key={index}
-                  initial={{ opacity: 0, x: -20 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: 0.5 + index * 0.1 }}
-                  className="flex items-start gap-3"
-                >
-                  <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0" />
-                  <span className="text-foreground/90">{feature}</span>
-                </motion.li>
-              ))}
-            </ul>
-          </div>
-
-          <div className="border-t border-border pt-8">
-            <h3 className="text-sm text-muted-foreground uppercase tracking-wider mb-4">建議</h3>
-            <p className="text-foreground/90 leading-relaxed">{resultType.suggestion}</p>
           </div>
         </motion.div>
 
@@ -174,36 +226,55 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
           </div>
         </motion.div>
 
-        {/* Closing Message */}
-        <motion.div
+        <motion.section
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.8, duration: 0.6 }}
-          className="text-center py-12 border-t border-border"
+          className="rounded-[2rem] bg-card border border-border p-6 md:p-8 mb-8"
         >
-          <p className="text-muted-foreground leading-relaxed mb-2">
-            投資本身沒有問題。
-          </p>
-          <p className="text-muted-foreground leading-relaxed mb-8">
-            但如果生活已經很緊繃，
-            <br />
-            市場波動就容易讓壓力被放大。
-          </p>
-
-          <div className="flex flex-col sm:flex-row gap-4 justify-center">
-            <Button
-              onClick={onRestart}
-              variant="outline"
-              className="border-border hover:bg-secondary"
-            >
-              <RefreshCcw className="h-4 w-4 mr-2" />
-              重新檢測
-            </Button>
-            <Button className="bg-primary text-primary-foreground hover:bg-primary/90">
-              了解更多財務韌性
-              <ChevronDown className="h-4 w-4 ml-2" />
-            </Button>
+          <div className="text-center mb-8">
+            <span className="inline-flex items-center gap-2 text-xs text-primary tracking-widest uppercase mb-3">
+              <Sparkles className="h-4 w-4" />
+              下一步
+            </span>
+            <h2 className="text-2xl md:text-3xl font-light">
+              了解風險後，你還可以
+            </h2>
           </div>
+
+          <div className="grid gap-4 sm:grid-cols-2">
+            {nextActions.map(({ title, description, icon: Icon }) => (
+              <button
+                key={title}
+                type="button"
+                className="group rounded-2xl bg-secondary/70 border border-transparent p-5 text-left transition-all hover:border-primary/40 hover:bg-secondary"
+              >
+                <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
+                  <Icon className="h-5 w-5" />
+                </span>
+                <span className="block font-medium text-foreground mb-2">{title}</span>
+                <span className="block text-sm leading-relaxed text-muted-foreground">
+                  {description}
+                </span>
+              </button>
+            ))}
+          </div>
+        </motion.section>
+
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 1, duration: 0.6 }}
+          className="text-center pb-8"
+        >
+          <Button
+            onClick={onRestart}
+            variant="outline"
+            className="border-border hover:bg-secondary"
+          >
+            <RefreshCcw className="h-4 w-4 mr-2" />
+            重新檢測
+          </Button>
         </motion.div>
       </div>
     </div>

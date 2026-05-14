@@ -23,7 +23,7 @@ export default function Home() {
 
   const handleRestart = () => {
     setAnswers({})
-    setAppState('hero')
+    setAppState('quiz')
   }
 
   const handleBackToHero = () => {

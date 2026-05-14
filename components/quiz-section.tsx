@@ -19,15 +19,18 @@ export function QuizSection({ onComplete, onBack }: QuizSectionProps) {
 
   const handleAnswer = useCallback((value: number) => {
     const questionId = questions[currentIndex].id
-    setAnswers((prev) => ({ ...prev, [questionId]: value }))
+    const nextAnswers = { ...answers, [questionId]: value }
+    setAnswers(nextAnswers)
     
-    // Auto advance after a short delay
+    // Keep a brief pause so the selected option still feels acknowledged.
     setTimeout(() => {
       if (currentIndex < questions.length - 1) {
         setCurrentIndex((prev) => prev + 1)
+      } else {
+        onComplete(nextAnswers)
       }
-    }, 300)
-  }, [currentIndex])
+    }, 140)
+  }, [answers, currentIndex, onComplete])
 
   const handlePrevious = useCallback(() => {
     if (currentIndex > 0) {

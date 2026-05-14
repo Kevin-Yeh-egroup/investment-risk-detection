@@ -20,7 +20,7 @@ export function QuestionCard({ questionIndex, answer, onAnswer }: QuestionCardPr
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}
         exit={{ opacity: 0, x: -50 }}
-        transition={{ duration: 0.3 }}
+        transition={{ duration: 0.18 }}
         className="w-full max-w-lg mx-auto"
       >
         <div className="mb-4">

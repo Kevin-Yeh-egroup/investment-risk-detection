@@ -137,11 +137,11 @@ export const questions: Question[] = [
 ]
 
 export const scaleOptions = [
-  { label: '非常不像我', value: 1 },
-  { label: '不太像我', value: 2 },
-  { label: '普通', value: 3 },
-  { label: '有點像我', value: 4 },
-  { label: '非常像我', value: 5 },
+  { label: '完全不是我', value: 1 },
+  { label: '不太符合我', value: 2 },
+  { label: '有一點符合', value: 3 },
+  { label: '蠻符合我', value: 4 },
+  { label: '很符合現在的我', value: 5 },
 ]
 
 export interface ResultType {

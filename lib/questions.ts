@@ -1,6 +1,13 @@
+export type ModuleId =
+  | 'financial_security'
+  | 'emotional_response'
+  | 'investment_understanding'
+  | 'life_stability'
+  | 'investment_anxiety'
+
 export interface Question {
   id: number
-  module: string
+  module: ModuleId
   moduleLabel: string
   text: string
   type: 'scale' | 'choice'
@@ -8,129 +15,263 @@ export interface Question {
   options?: { label: string; value: number }[]
 }
 
+export const moduleOrder: ModuleId[] = [
+  'financial_security',
+  'emotional_response',
+  'investment_understanding',
+  'life_stability',
+  'investment_anxiety',
+]
+
+export const moduleLabels: Record<ModuleId, string> = {
+  financial_security: '財務安全感',
+  emotional_response: '市場波動反應',
+  investment_understanding: '投資理解程度',
+  life_stability: '生活安全結構',
+  investment_anxiety: '金錢焦慮與動機',
+}
+
+export const moduleFeedback: Record<ModuleId, string> = {
+  financial_security:
+    '你已經完成生活用錢與投資資金的檢視。接下來會看看：台股或 ETF 下跌時，你通常會怎麼反應。',
+  emotional_response:
+    '你已經看見自己面對下跌與錯過機會時的反應。接下來會檢視：你是否真的知道自己買的是什麼。',
+  investment_understanding:
+    '你已經完成投資理解的快篩。接下來會把投資放回生活裡，看房租、房貸、保費或家庭責任會不會影響你的承受力。',
+  life_stability:
+    '你已經完成生活壓力的檢視。最後會看：你是照自己的節奏投資，還是容易被行情、朋友或社群推著走。',
+  investment_anxiety:
+    '五個指標都完成了。接下來會整理你的主要風險矛盾，而不是只給一個保守或積極的標籤。',
+}
+
 export const questions: Question[] = [
-  // 模組一｜財務安全感
+  // 指標一｜財務安全感
   {
     id: 1,
     module: 'financial_security',
-    moduleLabel: '財務安全感',
-    text: '如果突然有一兩個月收入變少，\n我還能維持基本生活。',
+    moduleLabel: moduleLabels.financial_security,
+    text: '如果接下來 3 個月收入變少，\n我還是能繳房租或房貸，並維持基本生活。',
     type: 'scale',
   },
   {
     id: 2,
     module: 'financial_security',
-    moduleLabel: '財務安全感',
-    text: '我現在有一些存款，\n遇到突發狀況時不至於太慌張。',
-    type: 'scale',
+    moduleLabel: moduleLabels.financial_security,
+    text: '目前的緊急預備金，\n大約可以支撐多久的基本生活？',
+    type: 'choice',
+    options: [
+      { label: '不到 1 個月', value: 1 },
+      { label: '約 1-2 個月', value: 2 },
+      { label: '約 3-5 個月', value: 3 },
+      { label: '約 6-12 個月', value: 4 },
+      { label: '超過 12 個月', value: 5 },
+    ],
   },
   {
     id: 3,
     module: 'financial_security',
-    moduleLabel: '財務安全感',
-    text: '就算投資賠錢，\n也不會直接影響現在的生活。',
+    moduleLabel: moduleLabels.financial_security,
+    text: '我拿去買股票、ETF 或基金的錢，\n不是明年就要拿來繳房租、房貸、保費或學費的錢。',
     type: 'scale',
   },
-
-  // 模組二｜投資情緒反應
   {
     id: 4,
-    module: 'emotional_response',
-    moduleLabel: '投資情緒反應',
-    text: '如果你投資的股票，\n短時間跌了不少。\n\n你比較像：',
+    module: 'financial_security',
+    moduleLabel: moduleLabels.financial_security,
+    text: '如果你的投資帳面虧損 20%，\n最接近你現況的描述是：',
     type: 'choice',
     options: [
-      { label: '很慌，會想趕快賣掉', value: 1 },
-      { label: '會一直查資訊、看新聞', value: 2 },
-      { label: '雖然會擔心，但還能冷靜', value: 4 },
-      { label: '覺得市場本來就會有波動', value: 5 },
+      { label: '會影響生活費或繳款', value: 1 },
+      { label: '生活還能過，但會很緊張', value: 2 },
+      { label: '會心痛，但不會影響基本生活', value: 3 },
+      { label: '不影響生活，只需要重新檢查計畫', value: 4 },
+      { label: '這是我原本就預留可承受的風險', value: 5 },
     ],
   },
   {
     id: 5,
-    module: 'emotional_response',
-    moduleLabel: '投資情緒反應',
-    text: '當市場下跌時，\n我容易影響心情或睡眠。',
-    type: 'scale',
-    reversed: true,
-  },
-  {
-    id: 6,
-    module: 'emotional_response',
-    moduleLabel: '投資情緒反應',
-    text: '我不太會因為新聞或別人的說法，\n突然改變投資決定。',
+    module: 'financial_security',
+    moduleLabel: moduleLabels.financial_security,
+    text: '即使台股連跌一陣子，\n我也不會因為房貸、房租、卡費或孝親費，\n被迫賣掉投資。',
     type: 'scale',
   },
 
-  // 模組三｜投資理解程度
+  // 指標二｜市場波動反應
+  {
+    id: 6,
+    module: 'emotional_response',
+    moduleLabel: moduleLabels.emotional_response,
+    text: '你在台股很熱的時候投入 50 萬買股票或 ETF。\n一週後帳面虧損 8 萬，\nLINE 群組有人說只是洗盤，也有人說要停損。\n\n你最可能：',
+    type: 'choice',
+    options: [
+      { label: '先賣掉，至少不要再賠', value: 1 },
+      { label: '一直看新聞和群組，想找理由安心', value: 2 },
+      { label: '回頭看買進理由，再決定是否調整', value: 4 },
+      { label: '覺得是正常波動，照原計畫執行', value: 5 },
+    ],
+  },
   {
     id: 7,
-    module: 'investment_understanding',
-    moduleLabel: '投資理解程度',
-    text: '我大概知道自己投資的是什麼。',
+    module: 'emotional_response',
+    moduleLabel: moduleLabels.emotional_response,
+    text: '如果今天帳戶又變少，\n我晚上仍大致睡得著，白天也能正常工作或生活。',
     type: 'scale',
   },
   {
     id: 8,
-    module: 'investment_understanding',
-    moduleLabel: '投資理解程度',
-    text: '我知道「賺比較快」\n通常也代表風險比較高。',
-    type: 'scale',
+    module: 'emotional_response',
+    moduleLabel: moduleLabels.emotional_response,
+    text: '朋友說他最近靠 AI 股、ETF 或當沖賺很多，\n而你還沒有進場。\n\n你比較可能：',
+    type: 'choice',
+    options: [
+      { label: '很焦慮，怕自己錯過這波行情', value: 1 },
+      { label: '立刻找標的，至少不要落後太多', value: 2 },
+      { label: '先研究原因，再決定是否適合自己', value: 4 },
+      { label: '能接受每個人的節奏不同', value: 5 },
+    ],
   },
   {
     id: 9,
-    module: 'investment_understanding',
-    moduleLabel: '投資理解程度',
-    text: '我不會只因為看到別人賺錢，\n就急著跟進。',
+    module: 'emotional_response',
+    moduleLabel: moduleLabels.emotional_response,
+    text: '我不太會因為 YouTube、Threads、LINE 群組或新聞標題，\n突然改變原本的投資決定。',
     type: 'scale',
   },
-
-  // 模組四｜生活壓力狀態
   {
     id: 10,
-    module: 'life_stress',
-    moduleLabel: '生活壓力狀態',
-    text: '現在的生活壓力，\n有時會讓我對未來感到不安。',
-    type: 'scale',
-    reversed: true,
+    module: 'emotional_response',
+    moduleLabel: moduleLabels.emotional_response,
+    text: '你原本帳面獲利 30%，\n最近漲幅縮小到只剩 10%。\n\n你最可能：',
+    type: 'choice',
+    options: [
+      { label: '非常懊惱，想立刻賣出保住剩下獲利', value: 1 },
+      { label: '一直想早知道該賣，心情被影響', value: 2 },
+      { label: '重新檢查是否仍符合原本判斷', value: 4 },
+      { label: '接受獲利回吐是市場常態', value: 5 },
+    ],
   },
+
+  // 指標三｜投資理解程度
   {
     id: 11,
-    module: 'life_stress',
-    moduleLabel: '生活壓力狀態',
-    text: '我的收入目前對家庭或生活很重要，\n不能有太大波動。',
+    module: 'investment_understanding',
+    moduleLabel: moduleLabels.investment_understanding,
+    text: '我買進一檔股票、ETF 或基金前，\n大致知道它為什麼可能賺錢，也知道它可能因為什麼虧損。',
     type: 'scale',
-    reversed: true,
   },
   {
     id: 12,
-    module: 'life_stress',
-    moduleLabel: '生活壓力狀態',
-    text: '就算突然發生一些意外或變化，\n我身邊還是有人或資源可以支持我。',
+    module: 'investment_understanding',
+    moduleLabel: moduleLabels.investment_understanding,
+    text: '看到有人說「這檔最近很會漲」時，\n我會先想到：漲得快，也可能跌得快。',
     type: 'scale',
   },
-
-  // 模組五｜投資背後的焦慮
   {
     id: 13,
-    module: 'investment_anxiety',
-    moduleLabel: '投資背後的焦慮',
-    text: '看到別人投資賺錢時，\n我有時會擔心自己錯過機會。',
-    type: 'scale',
-    reversed: true,
+    module: 'investment_understanding',
+    moduleLabel: moduleLabels.investment_understanding,
+    text: '有人推薦一檔熱門股票或 ETF，\n你只知道「很多人都在買」，還不清楚它實際投資什麼。\n\n你比較可能：',
+    type: 'choice',
+    options: [
+      { label: '先買一點，不然怕錯過', value: 1 },
+      { label: '看幾篇文章或影片就決定', value: 2 },
+      { label: '先確認它買什麼、風險是什麼、適不適合我', value: 4 },
+      { label: '不理解就不買，寧可錯過', value: 5 },
+    ],
   },
   {
     id: 14,
-    module: 'investment_anxiety',
-    moduleLabel: '投資背後的焦慮',
-    text: '我會希望透過投資，\n讓生活變得輕鬆一點。',
+    module: 'investment_understanding',
+    moduleLabel: moduleLabels.investment_understanding,
+    text: '買進前，我通常知道這筆投資是想放幾天、幾個月，\n還是準備放好幾年。',
     type: 'scale',
   },
   {
     id: 15,
+    module: 'investment_understanding',
+    moduleLabel: moduleLabels.investment_understanding,
+    text: '投資下跌時，\n我會先想清楚：是整個市場都在跌，\n還是我買的東西本身出了問題。',
+    type: 'scale',
+  },
+
+  // 指標四｜生活安全結構
+  {
+    id: 16,
+    module: 'life_stability',
+    moduleLabel: moduleLabels.life_stability,
+    text: '未來 1 到 3 年，\n我沒有很明確、很難延後的大筆支出，\n例如買房、結婚、生小孩、醫療或學費。',
+    type: 'scale',
+  },
+  {
+    id: 17,
+    module: 'life_stability',
+    moduleLabel: moduleLabels.life_stability,
+    text: '如果突然失業、生病或家裡有狀況，\n我身邊還有人、存款或資源可以先撐一段時間。',
+    type: 'scale',
+  },
+  {
+    id: 18,
+    module: 'life_stability',
+    moduleLabel: moduleLabels.life_stability,
+    text: '現在的家庭責任，\n例如房貸、孝親、照顧家人或小孩費用，\n讓我很難承受資產大幅下跌。',
+    type: 'scale',
+    reversed: true,
+  },
+  {
+    id: 19,
+    module: 'life_stability',
+    moduleLabel: moduleLabels.life_stability,
+    text: '如果台股或基金表現不好長達一年，\n我仍有空間不急著賣出原本打算長期放的投資。',
+    type: 'scale',
+  },
+  {
+    id: 20,
+    module: 'life_stability',
+    moduleLabel: moduleLabels.life_stability,
+    text: '我現在不是非靠投資賺一筆，\n才有辦法解決生活壓力。',
+    type: 'scale',
+  },
+
+  // 指標五｜金錢焦慮與投資動機
+  {
+    id: 21,
     module: 'investment_anxiety',
-    moduleLabel: '投資背後的焦慮',
-    text: '有時候我會覺得：\n現在不投資，好像會落後別人。',
+    moduleLabel: moduleLabels.investment_anxiety,
+    text: '看到別人搭上行情賺錢，\n我沒有跟到也不會覺得自己很失敗。',
+    type: 'scale',
+  },
+  {
+    id: 22,
+    module: 'investment_anxiety',
+    moduleLabel: moduleLabels.investment_anxiety,
+    text: '朋友、同事或社群貼出獲利截圖時，\n我仍能回到自己的目標與節奏。',
+    type: 'scale',
+  },
+  {
+    id: 23,
+    module: 'investment_anxiety',
+    moduleLabel: moduleLabels.investment_anxiety,
+    text: '台股創高、新聞一直報、身邊很多人說「再不上車就來不及」。\n\n你通常會：',
+    type: 'choice',
+    options: [
+      { label: '立刻進場，先卡位再說', value: 1 },
+      { label: '邊焦慮邊找資料，很難停下來', value: 2 },
+      { label: '暫停一下，確認這是不是焦慮在推動我', value: 4 },
+      { label: '回到原本計畫，不急著追行情', value: 5 },
+    ],
+  },
+  {
+    id: 24,
+    module: 'investment_anxiety',
+    moduleLabel: moduleLabels.investment_anxiety,
+    text: '我不會把投資當成翻轉人生、逃離焦慮，\n或證明自己沒有輸給別人的唯一方法。',
+    type: 'scale',
+  },
+  {
+    id: 25,
+    module: 'investment_anxiety',
+    moduleLabel: moduleLabels.investment_anxiety,
+    text: '我曾經因為怕錯過、怕落後，\n匆忙買進股票、ETF、基金或加碼，\n後來覺得自己太衝動。',
     type: 'scale',
     reversed: true,
   },
@@ -199,21 +340,39 @@ export const resultTypes: ResultType[] = [
   },
 ]
 
+export interface RiskIndexes {
+  objectiveCapacity: number
+  psychologicalStability: number
+  decisionQuality: number
+}
+
+export interface RiskContradiction {
+  id: string
+  title: string
+  severity: '高' | '中' | '低'
+  summary: string
+  whyItMatters: string
+  suggestion: string
+  signals: string[]
+}
+
+const emptyModuleScores = () => ({
+  financial_security: { total: 0, count: 0 },
+  emotional_response: { total: 0, count: 0 },
+  investment_understanding: { total: 0, count: 0 },
+  life_stability: { total: 0, count: 0 },
+  investment_anxiety: { total: 0, count: 0 },
+})
+
 export function calculateScores(answers: Record<number, number>) {
-  const modules = {
-    financial_security: { total: 0, count: 0 },
-    emotional_response: { total: 0, count: 0 },
-    investment_understanding: { total: 0, count: 0 },
-    life_stress: { total: 0, count: 0 },
-    investment_anxiety: { total: 0, count: 0 },
-  }
+  const modules = emptyModuleScores()
 
   questions.forEach((q) => {
     const answer = answers[q.id]
     if (answer !== undefined) {
       const score = q.reversed ? 6 - answer : answer
-      modules[q.module as keyof typeof modules].total += score
-      modules[q.module as keyof typeof modules].count += 1
+      modules[q.module].total += score
+      modules[q.module].count += 1
     }
   })
 
@@ -227,8 +386,8 @@ export function calculateScores(answers: Record<number, number>) {
     investment_understanding: modules.investment_understanding.count > 0 
       ? Math.round((modules.investment_understanding.total / (modules.investment_understanding.count * 5)) * 100) 
       : 0,
-    life_stress: modules.life_stress.count > 0 
-      ? Math.round((modules.life_stress.total / (modules.life_stress.count * 5)) * 100) 
+    life_stability: modules.life_stability.count > 0 
+      ? Math.round((modules.life_stability.total / (modules.life_stability.count * 5)) * 100) 
       : 0,
     investment_anxiety: modules.investment_anxiety.count > 0 
       ? Math.round((modules.investment_anxiety.total / (modules.investment_anxiety.count * 5)) * 100) 
@@ -237,10 +396,10 @@ export function calculateScores(answers: Record<number, number>) {
 }
 
 export function determineResultType(scores: ReturnType<typeof calculateScores>): ResultType {
-  const { financial_security, emotional_response, investment_understanding, life_stress, investment_anxiety } = scores
+  const { financial_security, emotional_response, investment_understanding, life_stability, investment_anxiety } = scores
   
   // 計算總體穩定度
-  const overallStability = (financial_security + emotional_response + investment_understanding + life_stress + investment_anxiety) / 5
+  const overallStability = (financial_security + emotional_response + investment_understanding + life_stability + investment_anxiety) / 5
   
   // 根據各維度分數判斷類型
   if (overallStability >= 70) {
@@ -251,9 +410,119 @@ export function determineResultType(scores: ReturnType<typeof calculateScores>):
     return resultTypes.find(r => r.id === 'fomo')!
   }
   
-  if (life_stress < 50 && financial_security < 50) {
+  if (life_stability < 50 && financial_security < 50) {
     return resultTypes.find(r => r.id === 'stressed')!
   }
   
   return resultTypes.find(r => r.id === 'emotional')!
+}
+
+export function calculateRiskIndexes(scores: ReturnType<typeof calculateScores>): RiskIndexes {
+  return {
+    objectiveCapacity: Math.round((scores.financial_security + scores.life_stability) / 2),
+    psychologicalStability: Math.round((scores.emotional_response + scores.investment_anxiety) / 2),
+    decisionQuality: scores.investment_understanding,
+  }
+}
+
+export function analyzeContradictions(scores: ReturnType<typeof calculateScores>): RiskContradiction {
+  const indexes = calculateRiskIndexes(scores)
+
+  if (scores.financial_security < 55 && scores.emotional_response >= 60) {
+    return {
+      id: 'bold_psychology_weak_finance',
+      title: '心理敢承受，但財務緩衝偏薄',
+      severity: '高',
+      summary: '你面對市場波動時不一定會立刻慌，但目前的財務安全空間可能沒有跟上投資膽量。',
+      whyItMatters: '這種狀態最容易在股市熱絡時提高部位；一旦生活支出、收入或市場同時出現變化，就可能被迫在不想賣的時候賣出。',
+      suggestion: '先設定「不能投入投資的錢」與緊急預備金底線，再決定投資部位。你需要先補強客觀承受力，而不是只靠心理撐住。',
+      signals: [
+        `財務安全感 ${scores.financial_security}%`,
+        `市場波動反應 ${scores.emotional_response}%`,
+        `客觀承受力 ${indexes.objectiveCapacity}%`,
+      ],
+    }
+  }
+
+  if (scores.emotional_response < 55 && scores.investment_anxiety < 55) {
+    return {
+      id: 'anxiety_driven',
+      title: '容易被行情與比較感推著走',
+      severity: '高',
+      summary: '市場下跌、別人獲利或錯過機會，都可能快速影響你的判斷與行動。',
+      whyItMatters: '這不代表你不能投資，而是你需要先分辨：現在是策略在帶路，還是焦慮在催促你進場。',
+      suggestion: '建議先建立「冷靜期」規則，例如重大投資決定至少隔一天、寫下買進理由與可承受虧損，再執行交易。',
+      signals: [
+        `市場波動反應 ${scores.emotional_response}%`,
+        `金錢焦慮管理 ${scores.investment_anxiety}%`,
+        `心理穩定度 ${indexes.psychologicalStability}%`,
+      ],
+    }
+  }
+
+  if (scores.investment_understanding < 55 && indexes.psychologicalStability >= 55) {
+    return {
+      id: 'confidence_before_understanding',
+      title: '心態相對穩，但理解可能還不夠完整',
+      severity: '中',
+      summary: '你不一定容易恐慌，但投資判斷若缺少商品理解與風險邏輯，穩定心態也可能撐錯方向。',
+      whyItMatters: '市場上漲時，冷靜的人也可能因為資訊不足而長期持有不適合自己的標的。',
+      suggestion: '在加碼前，先補上三件事：買進理由、可能虧損原因、什麼情況代表判斷錯了。',
+      signals: [
+        `投資理解程度 ${scores.investment_understanding}%`,
+        `心理穩定度 ${indexes.psychologicalStability}%`,
+      ],
+    }
+  }
+
+  if (scores.life_stability < 55 && scores.investment_anxiety < 60) {
+    return {
+      id: 'life_pressure_investing',
+      title: '生活壓力可能正在放大投資壓力',
+      severity: '中',
+      summary: '目前生活責任、未來支出或支持系統，可能讓你很難長期承受市場低迷。',
+      whyItMatters: '很多人真正撐不住的不是股市下跌本身，而是股市下跌剛好遇上生活事件。',
+      suggestion: '先把未來一年可能用到的錢與投資資金分開，並保留足夠現金流，讓投資不成為生活壓力的放大器。',
+      signals: [
+        `生活安全結構 ${scores.life_stability}%`,
+        `金錢焦慮管理 ${scores.investment_anxiety}%`,
+      ],
+    }
+  }
+
+  if (
+    scores.financial_security >= 65 &&
+    scores.emotional_response >= 65 &&
+    scores.investment_understanding >= 65 &&
+    scores.life_stability >= 65 &&
+    scores.investment_anxiety >= 65
+  ) {
+    return {
+      id: 'aligned_rational',
+      title: '心理、財務與生活結構相對一致',
+      severity: '低',
+      summary: '你目前較能把投資放在可承受的範圍內，也比較不容易被短期行情牽著走。',
+      whyItMatters: '這是適合逐步建立長期配置的狀態，但仍需要定期檢查生活變化與投資部位是否同步。',
+      suggestion: '可以把重點放在資產配置、再平衡規則與年度檢視，而不是追逐短期市場熱點。',
+      signals: [
+        `客觀承受力 ${indexes.objectiveCapacity}%`,
+        `心理穩定度 ${indexes.psychologicalStability}%`,
+        `決策品質 ${indexes.decisionQuality}%`,
+      ],
+    }
+  }
+
+  return {
+    id: 'mixed_awareness',
+    title: '目前沒有單一明顯矛盾，但仍有需要補強的面向',
+    severity: '中',
+    summary: '你的風險輪廓不是單一型態，可能是幾個面向都有一點拉扯。',
+    whyItMatters: '投資風險通常不是只來自一個弱點，而是財務、情緒、理解與生活壓力在特定時刻交疊。',
+    suggestion: '先從分數最低的面向開始補強；當最低分提高後，再重新檢視投資部位是否適合目前的承受力。',
+    signals: [
+      `最低面向 ${Math.min(...Object.values(scores))}%`,
+      `客觀承受力 ${indexes.objectiveCapacity}%`,
+      `心理穩定度 ${indexes.psychologicalStability}%`,
+    ],
+  }
 }

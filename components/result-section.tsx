@@ -3,20 +3,50 @@
 import { motion } from 'framer-motion'
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts'
 import { Button } from '@/components/ui/button'
-import { calculateScores, determineResultType, ResultType } from '@/lib/questions'
-import { Bot, ClipboardList, NotebookPen, RefreshCcw, Sparkles, WalletCards } from 'lucide-react'
+import {
+  analyzeContradictions,
+  calculateRiskIndexes,
+  calculateScores,
+  determineResultType,
+  moduleLabels,
+  moduleOrder,
+} from '@/lib/questions'
+import { AlertTriangle, Bot, ClipboardList, NotebookPen, RefreshCcw, Sparkles, WalletCards } from 'lucide-react'
+
+/* ─── Circular gauge ──────────────────────────────────────────────── */
+function CircularGauge({ value, size = 88 }: { value: number; size?: number }) {
+  const r = (size - 12) / 2
+  const circumference = 2 * Math.PI * r
+  const offset = circumference * (1 - value / 100)
+  const cx = size / 2
+  const cy = size / 2
+  return (
+    <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} className="-rotate-90">
+      <circle
+        cx={cx} cy={cy} r={r}
+        fill="none"
+        stroke="var(--secondary)"
+        strokeWidth={10}
+      />
+      <motion.circle
+        cx={cx} cy={cy} r={r}
+        fill="none"
+        stroke="var(--primary)"
+        strokeWidth={10}
+        strokeLinecap="round"
+        strokeDasharray={circumference}
+        initial={{ strokeDashoffset: circumference }}
+        animate={{ strokeDashoffset: offset }}
+        transition={{ duration: 0.9, ease: 'easeOut' }}
+      />
+    </svg>
+  )
+}
+/* ─────────────────────────────────────────────────────────────────── */
 
 interface ResultSectionProps {
   answers: Record<number, number>
   onRestart: () => void
-}
-
-const dimensionLabels: Record<string, string> = {
-  financial_security: '財務安全感',
-  emotional_response: '情緒穩定度',
-  investment_understanding: '投資理解',
-  life_stress: '壓力承受',
-  investment_anxiety: '焦慮管理',
 }
 
 const nextActions = [
@@ -42,6 +72,24 @@ const nextActions = [
   },
 ]
 
+const indexCards = [
+  {
+    key: 'objectiveCapacity',
+    title: '客觀承受力',
+    description: '財務緩衝與生活安全結構是否足夠。',
+  },
+  {
+    key: 'psychologicalStability',
+    title: '心理穩定度',
+    description: '市場波動與錯過機會時能否穩住判斷。',
+  },
+  {
+    key: 'decisionQuality',
+    title: '決策品質',
+    description: '是否理解自己買什麼、為什麼買、何時該調整。',
+  },
+] as const
+
 const resultIllustrations: Record<string, { src: string; alt: string }> = {
   emotional: {
     src: '/容易被市場情緒影響型.png',
@@ -63,28 +111,20 @@ const resultIllustrations: Record<string, { src: string; alt: string }> = {
 
 export function ResultSection({ answers, onRestart }: ResultSectionProps) {
   const scores = calculateScores(answers)
+  const indexes = calculateRiskIndexes(scores)
+  const contradiction = analyzeContradictions(scores)
   const resultType = determineResultType(scores)
   const resultIllustration = resultIllustrations[resultType.id]
 
-  const radarData = [
-    { dimension: '財務安全感', value: scores.financial_security, fullMark: 100 },
-    { dimension: '情緒穩定度', value: scores.emotional_response, fullMark: 100 },
-    { dimension: '投資理解', value: scores.investment_understanding, fullMark: 100 },
-    { dimension: '壓力承受', value: scores.life_stress, fullMark: 100 },
-    { dimension: '焦慮管理', value: scores.investment_anxiety, fullMark: 100 },
-  ]
-
-  const overallScore = Math.round(
-    (scores.financial_security + 
-     scores.emotional_response + 
-     scores.investment_understanding + 
-     scores.life_stress + 
-     scores.investment_anxiety) / 5
-  )
+  const radarData = moduleOrder.map((module) => ({
+    dimension: moduleLabels[module],
+    value: scores[module],
+    fullMark: 100,
+  }))
 
   return (
     <div className="min-h-screen px-6 py-12">
-      <div className="max-w-2xl mx-auto">
+      <div className="max-w-4xl mx-auto">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
@@ -95,43 +135,71 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
             檢測結果
           </span>
           <h1 className="text-3xl md:text-4xl font-light mb-4">
-            你現在承受的，
+            你真正要看的，
             <br />
-            <span className="text-primary">可能不只是投資壓力。</span>
+            <span className="text-primary">是風險矛盾。</span>
           </h1>
         </motion.div>
 
-        {/* Result Type */}
+        {/* Risk Contradiction */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
-          className="bg-card border border-border rounded-2xl p-8 md:p-10 mb-8"
+          className={`relative overflow-hidden rounded-2xl border mb-8 ${
+            contradiction.severity === '高'
+              ? 'border-orange-200 bg-orange-50/60'
+              : contradiction.severity === '中'
+              ? 'border-primary/25 bg-primary/5'
+              : 'border-border bg-card'
+          }`}
         >
+          {/* Left severity band */}
+          <div
+            className={`absolute left-0 top-0 bottom-0 w-1.5 rounded-l-2xl ${
+              contradiction.severity === '高'
+                ? 'bg-orange-400'
+                : contradiction.severity === '中'
+                ? 'bg-primary/60'
+                : 'bg-muted-foreground/40'
+            }`}
+          />
+          <div className="p-8 md:p-10 pl-10 md:pl-12">
           <div className="text-center mb-8">
-            {resultIllustration && (
-              <div className="mx-auto mb-8 max-w-[360px] overflow-hidden rounded-[2rem] bg-secondary shadow-lg shadow-primary/10">
-                <img
-                  src={resultIllustration.src}
-                  alt={resultIllustration.alt}
-                  className="h-auto w-full object-cover"
-                />
-              </div>
-            )}
-            <span className="text-xs text-primary tracking-widest uppercase mb-3 block">
-              你的投資狀態類型
+            <span
+              className={`mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl ${
+                contradiction.severity === '高'
+                  ? 'bg-orange-100 text-orange-500'
+                  : 'bg-primary/10 text-primary'
+              }`}
+            >
+              <AlertTriangle className="h-7 w-7" />
             </span>
-            <h2 className="text-2xl md:text-3xl font-light">{resultType.title}</h2>
+            <span className="text-xs text-primary tracking-widest uppercase mb-3 block">
+              你的主要風險矛盾
+            </span>
+            <h2 className="text-2xl md:text-3xl font-light">{contradiction.title}</h2>
+            <span
+              className={`mt-4 inline-flex rounded-full px-4 py-2 text-xs font-medium ${
+                contradiction.severity === '高'
+                  ? 'bg-orange-100 text-orange-600'
+                  : contradiction.severity === '中'
+                  ? 'bg-primary/10 text-primary'
+                  : 'bg-secondary text-muted-foreground'
+              }`}
+            >
+              風險提醒：{contradiction.severity}
+            </span>
           </div>
 
           <p className="text-muted-foreground leading-relaxed mb-8 text-center">
-            {resultType.description}
+            {contradiction.summary}
           </p>
 
           <div className="space-y-4 mb-8">
-            <h3 className="text-sm text-muted-foreground uppercase tracking-wider">主要特徵</h3>
+            <h3 className="text-sm text-muted-foreground uppercase tracking-wider">觀察到的訊號</h3>
             <ul className="space-y-3">
-              {resultType.features.map((feature, index) => (
+              {contradiction.signals.map((signal, index) => (
                 <motion.li
                   key={index}
                   initial={{ opacity: 0, x: -20 }}
@@ -140,16 +208,44 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
                   className="flex items-start gap-3"
                 >
                   <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0" />
-                  <span className="text-foreground/90">{feature}</span>
+                  <span className="text-foreground/90">{signal}</span>
                 </motion.li>
               ))}
             </ul>
           </div>
 
-          <div className="border-t border-border pt-8">
-            <h3 className="text-sm text-muted-foreground uppercase tracking-wider mb-4">建議</h3>
-            <p className="text-foreground/90 leading-relaxed">{resultType.suggestion}</p>
+          <div className="grid gap-5 border-t border-border/60 pt-8 md:grid-cols-2">
+            <div>
+              <h3 className="text-sm text-muted-foreground uppercase tracking-wider mb-4">為什麼重要</h3>
+              <p className="text-foreground/90 leading-relaxed">{contradiction.whyItMatters}</p>
+            </div>
+            <div>
+              <h3 className="text-sm text-muted-foreground uppercase tracking-wider mb-4">現在可以先做</h3>
+              <p className="text-foreground/90 leading-relaxed">{contradiction.suggestion}</p>
+            </div>
           </div>
+          </div>{/* /inner padding wrapper */}
+        </motion.div>
+
+        {/* Index Cards */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.35, duration: 0.6 }}
+          className="grid gap-4 md:grid-cols-3 mb-8"
+        >
+          {indexCards.map((card) => (
+            <div key={card.key} className="rounded-2xl border border-border bg-card p-6 flex flex-col items-center text-center">
+              <div className="relative mb-3">
+                <CircularGauge value={indexes[card.key]} size={88} />
+                <span className="absolute inset-0 flex items-center justify-center text-xl font-light text-primary">
+                  {indexes[card.key]}%
+                </span>
+              </div>
+              <p className="font-medium text-foreground mb-1">{card.title}</p>
+              <p className="text-xs leading-relaxed text-muted-foreground">{card.description}</p>
+            </div>
+          ))}
         </motion.div>
 
         {/* Radar Chart */}
@@ -185,10 +281,9 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
               </RadarChart>
             </ResponsiveContainer>
           </div>
-          <div className="text-center mt-4">
-            <span className="text-muted-foreground text-sm">整體穩定度</span>
-            <p className="text-3xl font-light text-primary mt-1">{overallScore}%</p>
-          </div>
+          <p className="text-center mt-4 text-sm leading-relaxed text-muted-foreground">
+            分數越高代表該面向越穩定；重點不是高低排名，而是看不同面向是否彼此一致。
+          </p>
         </motion.div>
 
         {/* Dimension Breakdown */}
@@ -200,7 +295,7 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
         >
           <h2 className="text-lg font-medium mb-6">各面向分數詳情</h2>
           <div className="space-y-6">
-            {Object.entries(scores).map(([key, value], index) => (
+            {moduleOrder.map((key, index) => (
               <motion.div
                 key={key}
                 initial={{ opacity: 0, x: -20 }}
@@ -209,20 +304,65 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
               >
                 <div className="flex justify-between items-center mb-2">
                   <span className="text-sm text-foreground/80">
-                    {dimensionLabels[key]}
+                    {moduleLabels[key]}
                   </span>
-                  <span className="text-sm font-medium text-primary">{value}%</span>
+                  <span className="text-sm font-medium text-primary">{scores[key]}%</span>
                 </div>
                 <div className="h-2 bg-secondary rounded-full overflow-hidden">
                   <motion.div
                     className="h-full bg-primary rounded-full"
                     initial={{ width: 0 }}
-                    animate={{ width: `${value}%` }}
+                    animate={{ width: `${scores[key]}%` }}
                     transition={{ delay: 0.8 + index * 0.1, duration: 0.6 }}
                   />
                 </div>
               </motion.div>
             ))}
+          </div>
+        </motion.div>
+
+        {/* Supporting Type */}
+        <motion.div
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ delay: 0.75, duration: 0.6 }}
+          className="bg-card border border-border rounded-2xl p-8 md:p-10 mb-8"
+        >
+          <div className="text-center mb-8">
+            {resultIllustration && (
+              <div className="mx-auto mb-8 max-w-[300px] overflow-hidden rounded-[2rem] bg-secondary shadow-lg shadow-primary/10">
+                <img
+                  src={resultIllustration.src}
+                  alt={resultIllustration.alt}
+                  className="h-auto w-full object-cover"
+                />
+              </div>
+            )}
+            <span className="text-xs text-primary tracking-widest uppercase mb-3 block">
+              輔助狀態描述
+            </span>
+            <h2 className="text-2xl md:text-3xl font-light">{resultType.title}</h2>
+          </div>
+
+          <p className="text-muted-foreground leading-relaxed mb-8 text-center">
+            {resultType.description}
+          </p>
+
+          <div className="space-y-4 mb-8">
+            <h3 className="text-sm text-muted-foreground uppercase tracking-wider">可能特徵</h3>
+            <ul className="space-y-3">
+              {resultType.features.map((feature) => (
+                <li key={feature} className="flex items-start gap-3">
+                  <span className="w-1.5 h-1.5 bg-primary rounded-full mt-2 shrink-0" />
+                  <span className="text-foreground/90">{feature}</span>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div className="border-t border-border pt-8">
+            <h3 className="text-sm text-muted-foreground uppercase tracking-wider mb-4">補充建議</h3>
+            <p className="text-foreground/90 leading-relaxed">{resultType.suggestion}</p>
           </div>
         </motion.div>
 

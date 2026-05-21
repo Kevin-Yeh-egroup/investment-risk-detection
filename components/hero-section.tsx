@@ -10,40 +10,40 @@ interface HeroSectionProps {
 
 const introPoints = [
   '不用輸入投資金額或個人資料',
-  '不是測驗你會不會投資',
-  '用日常情境看見風險承受狀態',
+  '不是判斷你適合買什麼商品',
+  '用白話情境看見風險矛盾',
 ]
 
 const steps = [
   {
     title: '看到貼近日常的情境',
-    description: '例如：市場下跌時會不會焦慮、生活支出能不能承受波動、是否容易因為別人獲利而跟進。',
+    description: '例如：台股下跌時會不會焦慮、房貸或保費會不會影響投資、是否容易因為朋友獲利而跟進。',
   },
   {
     title: '選出最接近你的答案',
-    description: '不需要計算報酬率，也不用準備投資明細。只要依照現在的感受回答。',
+    description: '不需要懂專業術語，也不用準備投資明細。只要依照你現在最可能的反應回答。',
   },
   {
     title: '整理你的投資風險輪廓',
-    description: '結果會呈現五個面向，幫你看見目前比較穩定、比較緊繃或容易受影響的地方。',
+    description: '結果會呈現主要風險矛盾、三個承受指數與五個面向，幫你看見哪裡一致、哪裡拉扯。',
   },
 ]
 
 const resultCards = [
   {
     icon: BarChart3,
-    title: '五維風險覺察分析',
-    description: '用雷達圖整理財務安全感、投資情緒、理解程度、生活壓力與投資焦慮。',
+    title: '風險矛盾分析',
+    description: '先看心理、財務與生活結構是否一致，而不是只給保守或積極標籤。',
   },
   {
     icon: HeartHandshake,
-    title: '貼近生活的狀態描述',
-    description: '不是給分排名，而是用更好理解的方式描述你現在面對投資波動的狀態。',
+    title: '三個承受指數',
+    description: '用白話整理客觀承受力、心理穩定度與決策品質，讓結果更容易行動。',
   },
   {
     icon: ShieldCheck,
-    title: '下一步提醒',
-    description: '幫你先確認生活與投資之間的承受空間，再慢慢思考適合自己的節奏。',
+    title: '五維覺察雷達圖',
+    description: '幫你看見財務、波動反應、投資理解、生活安全與金錢焦慮的差距。',
   },
 ]
 
@@ -67,7 +67,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
             </div>
           </div>
           <span className="rounded-full bg-white/80 px-4 py-2 text-xs font-medium text-muted-foreground shadow-sm">
-            約 3-5 分鐘
+            約 5-8 分鐘
           </span>
         </motion.header>
 
@@ -93,14 +93,14 @@ export function HeroSection({ onStart }: HeroSectionProps) {
             </div>
 
             <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-balance md:text-6xl">
-              用 15 題，快速了解
+              用 25 題，看見
               <br />
-              <span className="text-primary">你現在的投資風險承受狀態</span>
+              <span className="text-primary">你的投資風險矛盾</span>
             </h1>
 
             <div className="mb-8 max-w-2xl space-y-4 text-lg leading-relaxed text-muted-foreground">
-              <p>不是看你投資多少，而是看看現在的生活、情緒與財務安全感，是否真的承受得住市場波動。</p>
-              <p>這個小測驗會陪你把目前的狀態整理清楚，先看見自己，再決定下一步。</p>
+              <p>不是考你會不會投資，也不是要你填一堆專業資料。</p>
+              <p>這個小測驗會用台股、ETF、房貸、保費、社群消息等日常情境，陪你看見自己現在是否承受得住市場波動。</p>
             </div>
 
             <ul className="mb-9 space-y-3">
@@ -150,9 +150,9 @@ export function HeroSection({ onStart }: HeroSectionProps) {
               </p>
               <div className="mx-auto grid max-w-sm gap-3 text-left">
                 {[
-                  ['15 題', '貼近日常的情境問題'],
-                  ['5 面向', '整理你的風險輪廓'],
-                  ['不評分', '只協助你看懂現況'],
+                  ['25 題', '白話情境與簡單選項'],
+                  ['5 指標', '逐段整理你的風險輪廓'],
+                  ['不推商品', '只協助你看懂現況'],
                 ].map(([title, description]) => (
                   <div key={title} className="rounded-2xl bg-white/85 px-5 py-4 shadow-sm">
                     <p className="font-semibold text-foreground">{title}</p>

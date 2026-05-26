@@ -126,17 +126,17 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
   const resultType = determineResultType(scores)
   const resultIllustration = resultIllustrations[resultType.id]
   const hasClearContradiction = !['aligned_rational', 'mixed_awareness'].includes(contradiction.id)
-  const resultLabel = hasClearContradiction ? '你的主要風險落差' : '你的主要觀察結果'
+  const resultLabel = hasClearContradiction ? '你的主要風險矛盾' : '你的主要承受狀態'
   const resultBadge = contradiction.id === 'aligned_rational'
-    ? '觀察結果：大致對齊'
+    ? '承受狀態：相對穩定'
     : contradiction.id === 'mixed_awareness'
-      ? '觀察結果：輕度拉扯'
-      : `提醒程度：${contradiction.severity}`
+      ? '承受狀態：有輕度拉扯'
+      : `風險提醒：${contradiction.severity}`
   const plainExplanation = contradiction.id === 'aligned_rational'
-    ? '這次結果顯示風險大致對齊：你想承擔的投資風險，和目前財務、心理、生活條件大致能互相支撐。'
+    ? '這次結果顯示你的承受狀態相對穩定：投資心態、財務緩衝與生活條件目前能互相支撐。'
     : contradiction.id === 'mixed_awareness'
-      ? '這次沒有單一很突出的落差；比較像是幾個面向都有一點拉扯，可以先從最低分的地方補強。'
-      : '這裡的風險落差，指的是你想承擔的投資風險，和財務、心理或生活實際能承受的條件之間有距離。'
+      ? '這次沒有單一很突出的風險矛盾；比較像是幾個面向都有一點拉扯，可以先從最低分的地方補強。'
+      : '這裡的風險矛盾，指的是你以為自己能承擔的投資風險，和財務、心理或生活實際能承受的後果之間有落差。'
 
   const radarData = moduleOrder.map((module) => ({
     dimension: radarDimensionLabels[module],
@@ -159,10 +159,10 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
           <h1 className="text-3xl md:text-4xl font-light mb-4">
             你真正要看的，
             <br />
-            <span className="text-primary">是風險有沒有對齊。</span>
+            <span className="text-primary">是能不能承受後果。</span>
           </h1>
           <p className="mx-auto max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
-            不是判斷你保守或積極，而是看你想承擔的投資風險，和財務、心理、生活條件是否對得上。
+            不是問你願意賠多少，而是看市場或人生一起波動時，你還撐不撐得住這筆投資。
           </p>
         </motion.div>
 
@@ -316,7 +316,7 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
             </ResponsiveContainer>
           </div>
           <p className="text-center mt-4 text-sm leading-relaxed text-muted-foreground">
-            分數越高代表該面向越穩定；重點不是高低排名，而是看不同面向是否彼此對齊。
+            分數越高代表該面向越穩定；重點不是高低排名，而是看哪些面向會影響你的真實承受力。
           </p>
         </motion.div>
 

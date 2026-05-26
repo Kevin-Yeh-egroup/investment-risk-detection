@@ -41,7 +41,7 @@ export const moduleFeedback: Record<ModuleId, string> = {
   life_stability:
     '你已經完成生活壓力的檢視。最後會看：你是照自己的節奏投資，還是容易被行情、朋友或社群推著走。',
   investment_anxiety:
-    '五個指標都完成了。接下來會整理你的主要風險落差或對齊狀態，而不是只給一個保守或積極的標籤。',
+    '五個指標都完成了。接下來會整理你的主要風險矛盾或承受落差，而不是只給一個保守或積極的標籤。',
 }
 
 export const questions: Question[] = [
@@ -499,9 +499,9 @@ export function analyzeContradictions(scores: ReturnType<typeof calculateScores>
   ) {
     return {
       id: 'aligned_rational',
-      title: '目前大致對齊：心理、財務與生活能互相支撐',
+      title: '目前承受狀態相對穩定',
       severity: '低',
-      summary: '你的投資心態、財務緩衝與生活責任目前大致互相支撐，沒有看到特別明顯的拉扯。',
+      summary: '你的投資心態、財務緩衝與生活責任目前能互相支撐，沒有看到特別明顯的拉扯。',
       whyItMatters: '這代表你比較適合用長期規劃來管理投資，但生活條件、收入或家庭責任改變時，仍要重新確認部位是否合適。',
       suggestion: '可以先訂好投資比例與檢查時間，例如每半年或每年看一次；如果股票、ETF 或現金比例偏離原本安排太多，再調回來。',
       signals: [

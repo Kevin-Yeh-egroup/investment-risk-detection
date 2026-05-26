@@ -157,9 +157,7 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
             檢測結果
           </span>
           <h1 className="text-3xl md:text-4xl font-light mb-4">
-            你真正要看的，
-            <br />
-            <span className="text-primary">是能不能承受後果。</span>
+            你真正要看的，<span className="text-primary">是能不能承受後果。</span>
           </h1>
           <p className="mx-auto max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
             不是問你願意賠多少，而是看市場或人生一起波動時，你還撐不撐得住這筆投資。

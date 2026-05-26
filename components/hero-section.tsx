@@ -99,9 +99,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
             </div>
 
             <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-balance md:text-6xl">
-              用 25 題，看見
-              <br />
-              <span className="text-primary">你是否承受得起投資波動</span>
+              用 25 題，看見<span className="text-primary">你是否承受得起投資波動</span>
             </h1>
 
             <div className="mb-8 max-w-2xl space-y-4 text-lg leading-relaxed text-muted-foreground">
@@ -149,7 +147,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
               </a>
             </div>
             <p className="mt-4 text-sm text-muted-foreground">
-              不用登入、不留資料，答案只用來產生這次結果。
+              目前測驗不用登入、不留資料；若未來想保存結果，再由你選擇是否建立帳號。
             </p>
           </motion.div>
 

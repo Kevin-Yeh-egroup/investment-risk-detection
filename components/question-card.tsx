@@ -71,8 +71,16 @@ function OptionButton({
   )
 }
 
+function formatQuestionText(text: string) {
+  return text
+    .split(/\n{2,}/)
+    .map((paragraph) => paragraph.replace(/\s*\n\s*/g, '').trim())
+    .filter(Boolean)
+}
+
 export function QuestionCard({ questionIndex, answer, onAnswer }: QuestionCardProps) {
   const question = questions[questionIndex]
+  const questionParagraphs = formatQuestionText(question.text)
 
   const options =
     question.type === 'scale'
@@ -96,9 +104,11 @@ export function QuestionCard({ questionIndex, answer, onAnswer }: QuestionCardPr
         </div>
 
         <div className="bg-card border border-border rounded-2xl p-8 md:p-10">
-          <p className="text-xl md:text-2xl font-light leading-relaxed whitespace-pre-line text-foreground mb-10">
-            {question.text}
-          </p>
+          <div className="mb-10 space-y-4 text-xl font-light leading-relaxed text-foreground md:text-2xl">
+            {questionParagraphs.map((paragraph) => (
+              <p key={paragraph}>{paragraph}</p>
+            ))}
+          </div>
 
           <div className="space-y-3">
             {options.map((option) => (

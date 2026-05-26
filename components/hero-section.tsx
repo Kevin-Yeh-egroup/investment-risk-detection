@@ -11,7 +11,7 @@ interface HeroSectionProps {
 const introPoints = [
   '不用輸入投資金額或個人資料',
   '不是判斷你適合買什麼商品',
-  '用白話情境看見風險矛盾',
+  '用白話情境看見風險有沒有對齊',
 ]
 
 const steps = [
@@ -25,15 +25,15 @@ const steps = [
   },
   {
     title: '整理你的投資風險輪廓',
-    description: '結果會呈現主要風險矛盾、三個承受指數與五個面向，幫你看見哪裡一致、哪裡拉扯。',
+    description: '結果會呈現主要風險落差或對齊狀態、三個承受指數與五個面向，幫你看見哪裡對得上、哪裡有拉扯。',
   },
 ]
 
 const resultCards = [
   {
     icon: BarChart3,
-    title: '風險矛盾分析',
-    description: '先看心理、財務與生活結構是否一致，而不是只給保守或積極標籤。',
+    title: '風險對齊檢查',
+    description: '先看心理、財務與生活結構是否對齊；若不對齊，再指出主要落差。',
   },
   {
     icon: HeartHandshake,
@@ -95,7 +95,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
             <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-balance md:text-6xl">
               用 25 題，看見
               <br />
-              <span className="text-primary">你的投資風險矛盾</span>
+              <span className="text-primary">你的風險有沒有對齊</span>
             </h1>
 
             <div className="mb-8 max-w-2xl space-y-4 text-lg leading-relaxed text-muted-foreground">

@@ -3,6 +3,7 @@
 import { motion } from 'framer-motion'
 import { Radar, RadarChart, PolarGrid, PolarAngleAxis, PolarRadiusAxis, ResponsiveContainer } from 'recharts'
 import { Button } from '@/components/ui/button'
+import { useIsMobile } from '@/components/ui/use-mobile'
 import {
   analyzeContradictions,
   calculateRiskIndexes,
@@ -109,15 +110,36 @@ const resultIllustrations: Record<string, { src: string; alt: string }> = {
   },
 }
 
+const radarDimensionLabels: Record<(typeof moduleOrder)[number], string> = {
+  financial_security: '財務安全',
+  emotional_response: '市場波動',
+  investment_understanding: '投資理解',
+  life_stability: '生活結構',
+  investment_anxiety: '焦慮動機',
+}
+
 export function ResultSection({ answers, onRestart }: ResultSectionProps) {
+  const isMobile = useIsMobile()
   const scores = calculateScores(answers)
   const indexes = calculateRiskIndexes(scores)
   const contradiction = analyzeContradictions(scores)
   const resultType = determineResultType(scores)
   const resultIllustration = resultIllustrations[resultType.id]
+  const hasClearContradiction = !['aligned_rational', 'mixed_awareness'].includes(contradiction.id)
+  const resultLabel = hasClearContradiction ? '你的主要風險落差' : '你的主要觀察結果'
+  const resultBadge = contradiction.id === 'aligned_rational'
+    ? '觀察結果：大致對齊'
+    : contradiction.id === 'mixed_awareness'
+      ? '觀察結果：輕度拉扯'
+      : `提醒程度：${contradiction.severity}`
+  const plainExplanation = contradiction.id === 'aligned_rational'
+    ? '這次結果顯示風險大致對齊：你想承擔的投資風險，和目前財務、心理、生活條件大致能互相支撐。'
+    : contradiction.id === 'mixed_awareness'
+      ? '這次沒有單一很突出的落差；比較像是幾個面向都有一點拉扯，可以先從最低分的地方補強。'
+      : '這裡的風險落差，指的是你想承擔的投資風險，和財務、心理或生活實際能承受的條件之間有距離。'
 
   const radarData = moduleOrder.map((module) => ({
-    dimension: moduleLabels[module],
+    dimension: radarDimensionLabels[module],
     value: scores[module],
     fullMark: 100,
   }))
@@ -137,8 +159,11 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
           <h1 className="text-3xl md:text-4xl font-light mb-4">
             你真正要看的，
             <br />
-            <span className="text-primary">是風險矛盾。</span>
+            <span className="text-primary">是風險有沒有對齊。</span>
           </h1>
+          <p className="mx-auto max-w-2xl text-sm leading-relaxed text-muted-foreground md:text-base">
+            不是判斷你保守或積極，而是看你想承擔的投資風險，和財務、心理、生活條件是否對得上。
+          </p>
         </motion.div>
 
         {/* Risk Contradiction */}
@@ -176,7 +201,7 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
               <AlertTriangle className="h-7 w-7" />
             </span>
             <span className="text-xs text-primary tracking-widest uppercase mb-3 block">
-              你的主要風險矛盾
+              {resultLabel}
             </span>
             <h2 className="text-2xl md:text-3xl font-light">{contradiction.title}</h2>
             <span
@@ -188,10 +213,13 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
                   : 'bg-secondary text-muted-foreground'
               }`}
             >
-              風險提醒：{contradiction.severity}
+              {resultBadge}
             </span>
           </div>
 
+          <p className="mx-auto mb-5 max-w-2xl text-center text-sm leading-relaxed text-muted-foreground">
+            {plainExplanation}
+          </p>
           <p className="text-muted-foreground leading-relaxed mb-8 text-center">
             {contradiction.summary}
           </p>
@@ -256,13 +284,19 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
           className="bg-card border border-border rounded-2xl p-6 md:p-8 mb-8"
         >
           <h2 className="text-lg font-medium mb-6 text-center">五維風險覺察分析</h2>
-          <div className="h-[300px] md:h-[350px]">
+          <div className="h-[320px] overflow-visible md:h-[350px]">
             <ResponsiveContainer width="100%" height="100%">
-              <RadarChart cx="50%" cy="50%" outerRadius="70%" data={radarData}>
+              <RadarChart
+                cx="50%"
+                cy="50%"
+                outerRadius={isMobile ? '68%' : '70%'}
+                data={radarData}
+                margin={isMobile ? { top: 28, right: 24, bottom: 28, left: 24 } : { top: 20, right: 24, bottom: 20, left: 24 }}
+              >
                 <PolarGrid stroke="var(--border)" />
                 <PolarAngleAxis 
                   dataKey="dimension" 
-                  tick={{ fill: 'var(--muted-foreground)', fontSize: 12 }}
+                  tick={{ fill: 'var(--muted-foreground)', fontSize: isMobile ? 11 : 12 }}
                 />
                 <PolarRadiusAxis 
                   angle={90} 
@@ -282,7 +316,7 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
             </ResponsiveContainer>
           </div>
           <p className="text-center mt-4 text-sm leading-relaxed text-muted-foreground">
-            分數越高代表該面向越穩定；重點不是高低排名，而是看不同面向是否彼此一致。
+            分數越高代表該面向越穩定；重點不是高低排名，而是看不同面向是否彼此對齊。
           </p>
         </motion.div>
 

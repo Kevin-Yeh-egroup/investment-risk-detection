@@ -41,7 +41,7 @@ export const moduleFeedback: Record<ModuleId, string> = {
   life_stability:
     '你已經完成生活壓力的檢視。最後會看：你是照自己的節奏投資，還是容易被行情、朋友或社群推著走。',
   investment_anxiety:
-    '五個指標都完成了。接下來會整理你的主要風險矛盾，而不是只給一個保守或積極的標籤。',
+    '五個指標都完成了。接下來會整理你的主要風險落差或對齊狀態，而不是只給一個保守或積極的標籤。',
 }
 
 export const questions: Question[] = [
@@ -499,11 +499,11 @@ export function analyzeContradictions(scores: ReturnType<typeof calculateScores>
   ) {
     return {
       id: 'aligned_rational',
-      title: '心理、財務與生活結構相對一致',
+      title: '目前大致對齊：心理、財務與生活能互相支撐',
       severity: '低',
-      summary: '你目前較能把投資放在可承受的範圍內，也比較不容易被短期行情牽著走。',
-      whyItMatters: '這是適合逐步建立長期配置的狀態，但仍需要定期檢查生活變化與投資部位是否同步。',
-      suggestion: '可以把重點放在資產配置、再平衡規則與年度檢視，而不是追逐短期市場熱點。',
+      summary: '你的投資心態、財務緩衝與生活責任目前大致互相支撐，沒有看到特別明顯的拉扯。',
+      whyItMatters: '這代表你比較適合用長期規劃來管理投資，但生活條件、收入或家庭責任改變時，仍要重新確認部位是否合適。',
+      suggestion: '可以先訂好投資比例與檢查時間，例如每半年或每年看一次；如果股票、ETF 或現金比例偏離原本安排太多，再調回來。',
       signals: [
         `客觀承受力 ${indexes.objectiveCapacity}%`,
         `心理穩定度 ${indexes.psychologicalStability}%`,
@@ -514,9 +514,9 @@ export function analyzeContradictions(scores: ReturnType<typeof calculateScores>
 
   return {
     id: 'mixed_awareness',
-    title: '目前沒有單一明顯矛盾，但仍有需要補強的面向',
+    title: '目前有些輕度拉扯，可先補強最低分面向',
     severity: '中',
-    summary: '你的風險輪廓不是單一型態，可能是幾個面向都有一點拉扯。',
+    summary: '你的風險輪廓不是單一型態，幾個面向都有一點拉扯；先看分數最低的地方就好。',
     whyItMatters: '投資風險通常不是只來自一個弱點，而是財務、情緒、理解與生活壓力在特定時刻交疊。',
     suggestion: '先從分數最低的面向開始補強；當最低分提高後，再重新檢視投資部位是否適合目前的承受力。',
     signals: [

@@ -52,9 +52,14 @@ interface ResultSectionProps {
 
 const nextActions = [
   {
-    title: '進行其他財務檢測',
-    description: '從不同面向整理目前的財務狀態。',
+    title: '建立我的冷靜期規則',
+    description: '先寫下買進理由、可承受虧損與隔天再決定的提醒。',
     icon: ClipboardList,
+  },
+  {
+    title: '整理可動用資金清單',
+    description: '把生活費、緊急預備金與投資資金分開看。',
+    icon: WalletCards,
   },
   {
     title: '問問AI',
@@ -62,13 +67,8 @@ const nextActions = [
     icon: Bot,
   },
   {
-    title: '免費線上財務諮詢',
-    description: '需要有人一起討論時，可以預約諮詢。',
-    icon: WalletCards,
-  },
-  {
-    title: '開始記錄我的財務',
-    description: '用記錄看見收入、支出與生活壓力的變化。',
+    title: '找人一起討論',
+    description: '需要時，再帶著結果找可信任的人或專業顧問討論。',
     icon: NotebookPen,
   },
 ]
@@ -102,7 +102,7 @@ const resultIllustrations: Record<string, { src: string; alt: string }> = {
   },
   fomo: {
     src: '/跟風焦慮型.png',
-    alt: '跟風焦慮型插圖',
+    alt: '容易被行情牽動型插圖',
   },
   stable: {
     src: '/穩定觀察型.png',
@@ -418,9 +418,8 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
 
           <div className="grid gap-4 sm:grid-cols-2">
             {nextActions.map(({ title, description, icon: Icon }) => (
-              <button
+              <article
                 key={title}
-                type="button"
                 className="group rounded-2xl bg-secondary/70 border border-transparent p-5 text-left transition-all hover:border-primary/40 hover:bg-secondary"
               >
                 <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
@@ -430,7 +429,7 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
                 <span className="block text-sm leading-relaxed text-muted-foreground">
                   {description}
                 </span>
-              </button>
+              </article>
             ))}
           </div>
         </motion.section>

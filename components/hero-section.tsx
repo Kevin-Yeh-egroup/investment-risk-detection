@@ -14,6 +14,12 @@ const introPoints = [
   '用白話情境看見真正承受力',
 ]
 
+const concernPrompts = [
+  '大家都在賺，我是不是太晚了？',
+  '如果跌下來，我會不會睡不著？',
+  '房貸、保費、孝親還在，投資會不會壓到生活？',
+]
+
 const steps = [
   {
     title: '看到貼近日常的情境',
@@ -67,7 +73,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
             </div>
           </div>
           <span className="rounded-full bg-white/80 px-4 py-2 text-xs font-medium text-muted-foreground shadow-sm">
-            約 5-8 分鐘
+            約 5-8 分鐘｜看見主要提醒
           </span>
         </motion.header>
 
@@ -103,6 +109,19 @@ export function HeroSection({ onStart }: HeroSectionProps) {
               <p>這個小測驗會用台股、ETF、房貸、保費、社群消息等日常情境，陪你看見自己現在是否承受得住市場波動。</p>
             </div>
 
+            <div className="mb-8 max-w-2xl rounded-3xl border border-primary/15 bg-white/80 p-5 shadow-sm">
+              <p className="mb-4 text-sm font-semibold text-primary">
+                如果你最近也出現過這些念頭，這份測驗會有幫助：
+              </p>
+              <div className="grid gap-3">
+                {concernPrompts.map((prompt) => (
+                  <div key={prompt} className="rounded-2xl bg-background px-4 py-3 text-sm text-foreground/85">
+                    {prompt}
+                  </div>
+                ))}
+              </div>
+            </div>
+
             <ul className="mb-9 space-y-3">
               {introPoints.map((point) => (
                 <li key={point} className="flex items-center gap-3 text-foreground/85">
@@ -129,6 +148,9 @@ export function HeroSection({ onStart }: HeroSectionProps) {
                 <ArrowDown className="h-4 w-4" />
               </a>
             </div>
+            <p className="mt-4 text-sm text-muted-foreground">
+              不用登入、不留資料，答案只用來產生這次結果。
+            </p>
           </motion.div>
 
           <motion.div
@@ -143,7 +165,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
               <div className="mx-auto mb-6 flex h-20 w-20 items-center justify-center rounded-[1.75rem] bg-white/80 text-4xl shadow-sm">
                 🏠
               </div>
-              <p className="mb-2 text-sm font-semibold tracking-widest text-white/85">好好理財，家才會在</p>
+              <p className="mb-2 text-sm font-semibold tracking-widest text-white/85">把生活放進投資一起看</p>
               <h2 className="mb-4 text-2xl font-bold text-white md:text-3xl">先確認現在的位置</h2>
               <p className="mx-auto mb-8 max-w-sm leading-relaxed text-white/90">
                 投資不是只有報酬率，也包含你能不能安心睡覺、生活是否留有緩衝，以及決策時是否被焦慮推著走。

@@ -52,24 +52,28 @@ interface ResultSectionProps {
 
 const nextActions = [
   {
-    title: '建立我的冷靜期規則',
-    description: '先寫下買進理由、可承受虧損與隔天再決定的提醒。',
+    title: '前往好理家在財務健檢',
+    description: '把投資風險放回生活收支、家庭責任與近期壓力一起整理。',
     icon: ClipboardList,
+    href: 'https://www.familyfinhealth.com/dashboard/citizen',
   },
   {
-    title: '整理可動用資金清單',
-    description: '把生活費、緊急預備金與投資資金分開看。',
-    icon: WalletCards,
-  },
-  {
-    title: '問問AI',
-    description: '把剛剛想到的問題，先用簡單方式問清楚。',
+    title: '用問問 AI 釐清問題',
+    description: '把測驗結果整理成想問的問題，不請 AI 推薦標的或配置。',
     icon: Bot,
+    href: 'https://www.familyfinhealth.com/',
   },
   {
-    title: '找人一起討論',
-    description: '需要時，再帶著結果找可信任的人或專業顧問討論。',
+    title: '使用工具箱慢慢整理',
+    description: '先用好理家在工具，把數字、壓力與可用資源看得更清楚。',
+    icon: WalletCards,
+    href: 'https://www.familyfinhealth.com/toolbox/financial-calculator',
+  },
+  {
+    title: '預約線上諮詢',
+    description: '當你需要有人陪你釐清狀況時，帶著結果和好理家在一起整理。',
     icon: NotebookPen,
+    href: 'https://www.familyfinhealth.com/online-consultation',
   },
 ]
 
@@ -410,14 +414,17 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
               下一步
             </span>
             <h2 className="text-2xl md:text-3xl font-light">
-              了解風險後，你還可以
+              把結果帶回好理家在慢慢整理
             </h2>
           </div>
 
           <div className="grid gap-4 sm:grid-cols-2">
-            {nextActions.map(({ title, description, icon: Icon }) => (
-              <article
+            {nextActions.map(({ title, description, icon: Icon, href }) => (
+              <a
                 key={title}
+                href={href}
+                target="_blank"
+                rel="noreferrer"
                 className="group rounded-2xl bg-secondary/70 border border-transparent p-5 text-left transition-all hover:border-primary/40 hover:bg-secondary"
               >
                 <span className="mb-4 flex h-11 w-11 items-center justify-center rounded-2xl bg-primary/10 text-primary transition-colors group-hover:bg-primary group-hover:text-primary-foreground">
@@ -427,7 +434,7 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
                 <span className="block text-sm leading-relaxed text-muted-foreground">
                   {description}
                 </span>
-              </article>
+              </a>
             ))}
           </div>
         </motion.section>

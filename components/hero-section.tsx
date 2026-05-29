@@ -73,7 +73,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
             </div>
           </div>
           <span className="rounded-full bg-white/80 px-4 py-2 text-xs font-medium text-muted-foreground shadow-sm">
-            約 5-8 分鐘｜看見主要提醒
+            約 3-5 分鐘｜看見主要提醒
           </span>
         </motion.header>
 
@@ -99,7 +99,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
             </div>
 
             <h1 className="mb-6 text-4xl font-bold leading-tight tracking-tight text-balance md:text-6xl">
-              用 25 題，看見<span className="text-primary">你是否承受得起投資波動</span>
+              用 15 題，看見<span className="text-primary">你是否承受得起投資波動</span>
             </h1>
 
             <div className="mb-8 max-w-2xl space-y-4 text-lg leading-relaxed text-muted-foreground">
@@ -170,7 +170,7 @@ export function HeroSection({ onStart }: HeroSectionProps) {
               </p>
               <div className="mx-auto grid max-w-sm gap-3 text-left">
                 {[
-                  ['25 題', '白話情境與簡單選項'],
+                  ['15 題', '白話情境與簡單選項'],
                   ['5 指標', '逐段整理你的風險輪廓'],
                   ['不推商品', '只協助你看懂現況'],
                 ].map(([title, description]) => (

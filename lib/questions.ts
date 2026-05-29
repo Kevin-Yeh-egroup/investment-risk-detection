@@ -50,13 +50,6 @@ export const questions: Question[] = [
     id: 1,
     module: 'financial_security',
     moduleLabel: moduleLabels.financial_security,
-    text: '如果接下來 3 個月收入變少，\n我還是能繳房租或房貸，並維持基本生活。',
-    type: 'scale',
-  },
-  {
-    id: 2,
-    module: 'financial_security',
-    moduleLabel: moduleLabels.financial_security,
     text: '目前的緊急預備金，\n大約可以支撐多久的基本生活？',
     type: 'choice',
     options: [
@@ -68,14 +61,14 @@ export const questions: Question[] = [
     ],
   },
   {
-    id: 3,
+    id: 2,
     module: 'financial_security',
     moduleLabel: moduleLabels.financial_security,
     text: '我拿去買股票、ETF 或基金的錢，\n不是明年就要拿來繳房租、房貸、保費或學費的錢。',
     type: 'scale',
   },
   {
-    id: 4,
+    id: 3,
     module: 'financial_security',
     moduleLabel: moduleLabels.financial_security,
     text: '如果你的投資帳面虧損 20%，\n最接近你現況的描述是：',
@@ -88,17 +81,10 @@ export const questions: Question[] = [
       { label: '這是我原本就預留可承受的風險', value: 5 },
     ],
   },
-  {
-    id: 5,
-    module: 'financial_security',
-    moduleLabel: moduleLabels.financial_security,
-    text: '即使台股連跌一陣子，\n我也不會因為房貸、房租、卡費或孝親費，\n被迫賣掉投資。',
-    type: 'scale',
-  },
 
   // 指標二｜市場波動反應
   {
-    id: 6,
+    id: 4,
     module: 'emotional_response',
     moduleLabel: moduleLabels.emotional_response,
     text: '你在台股很熱的時候投入 50 萬買股票或 ETF。\n一週後帳面虧損 8 萬，\nLINE 群組有人說只是洗盤，也有人說要停損。\n\n你最可能：',
@@ -111,34 +97,14 @@ export const questions: Question[] = [
     ],
   },
   {
-    id: 7,
+    id: 5,
     module: 'emotional_response',
     moduleLabel: moduleLabels.emotional_response,
     text: '如果今天帳戶又變少，\n我晚上仍大致睡得著，白天也能正常工作或生活。',
     type: 'scale',
   },
   {
-    id: 8,
-    module: 'emotional_response',
-    moduleLabel: moduleLabels.emotional_response,
-    text: '朋友說他最近靠 AI 股、ETF 或當沖賺很多，\n而你還沒有進場。\n\n你比較可能：',
-    type: 'choice',
-    options: [
-      { label: '很焦慮，怕自己錯過這波行情', value: 1 },
-      { label: '立刻找標的，至少不要落後太多', value: 2 },
-      { label: '先研究原因，再決定是否適合自己', value: 4 },
-      { label: '能接受每個人的節奏不同', value: 5 },
-    ],
-  },
-  {
-    id: 9,
-    module: 'emotional_response',
-    moduleLabel: moduleLabels.emotional_response,
-    text: '我不太會因為 YouTube、Threads、LINE 群組或新聞標題，\n突然改變原本的投資決定。',
-    type: 'scale',
-  },
-  {
-    id: 10,
+    id: 6,
     module: 'emotional_response',
     moduleLabel: moduleLabels.emotional_response,
     text: '你原本帳面獲利 30%，\n最近漲幅縮小到只剩 10%。\n\n你最可能：',
@@ -153,21 +119,14 @@ export const questions: Question[] = [
 
   // 指標三｜投資理解程度
   {
-    id: 11,
+    id: 7,
     module: 'investment_understanding',
     moduleLabel: moduleLabels.investment_understanding,
     text: '我買進一檔股票、ETF 或基金前，\n大致知道它為什麼可能賺錢，也知道它可能因為什麼虧損。',
     type: 'scale',
   },
   {
-    id: 12,
-    module: 'investment_understanding',
-    moduleLabel: moduleLabels.investment_understanding,
-    text: '看到有人說「這檔最近很會漲」時，\n我會先想到：漲得快，也可能跌得快。',
-    type: 'scale',
-  },
-  {
-    id: 13,
+    id: 8,
     module: 'investment_understanding',
     moduleLabel: moduleLabels.investment_understanding,
     text: '有人推薦一檔熱門股票或 ETF，\n你只知道「很多人都在買」，還不清楚它實際投資什麼。\n\n你比較可能：',
@@ -180,37 +139,23 @@ export const questions: Question[] = [
     ],
   },
   {
-    id: 14,
+    id: 9,
     module: 'investment_understanding',
     moduleLabel: moduleLabels.investment_understanding,
     text: '買進前，我通常知道這筆投資是想放幾天、幾個月，\n還是準備放好幾年。',
     type: 'scale',
   },
-  {
-    id: 15,
-    module: 'investment_understanding',
-    moduleLabel: moduleLabels.investment_understanding,
-    text: '投資下跌時，\n我會先想清楚：是整個市場都在跌，\n還是我買的東西本身出了問題。',
-    type: 'scale',
-  },
 
   // 指標四｜生活安全結構
   {
-    id: 16,
+    id: 10,
     module: 'life_stability',
     moduleLabel: moduleLabels.life_stability,
     text: '未來 1 到 3 年，\n我沒有很明確、很難延後的大筆支出，\n例如買房、結婚、生小孩、醫療或學費。',
     type: 'scale',
   },
   {
-    id: 17,
-    module: 'life_stability',
-    moduleLabel: moduleLabels.life_stability,
-    text: '如果突然失業、生病或家裡有狀況，\n我身邊還有人、存款或資源可以先撐一段時間。',
-    type: 'scale',
-  },
-  {
-    id: 18,
+    id: 11,
     module: 'life_stability',
     moduleLabel: moduleLabels.life_stability,
     text: '現在的家庭責任，\n例如房貸、孝親、照顧家人或小孩費用，\n讓我很難承受資產大幅下跌。',
@@ -218,14 +163,7 @@ export const questions: Question[] = [
     reversed: true,
   },
   {
-    id: 19,
-    module: 'life_stability',
-    moduleLabel: moduleLabels.life_stability,
-    text: '如果台股或基金表現不好長達一年，\n我仍有空間不急著賣出原本打算長期放的投資。',
-    type: 'scale',
-  },
-  {
-    id: 20,
+    id: 12,
     module: 'life_stability',
     moduleLabel: moduleLabels.life_stability,
     text: '我現在不是非靠投資賺一筆，\n才有辦法解決生活壓力。',
@@ -234,21 +172,7 @@ export const questions: Question[] = [
 
   // 指標五｜金錢焦慮與投資動機
   {
-    id: 21,
-    module: 'investment_anxiety',
-    moduleLabel: moduleLabels.investment_anxiety,
-    text: '看到別人搭上行情賺錢，\n我沒有跟到也不會覺得自己很失敗。',
-    type: 'scale',
-  },
-  {
-    id: 22,
-    module: 'investment_anxiety',
-    moduleLabel: moduleLabels.investment_anxiety,
-    text: '朋友、同事或社群貼出獲利截圖時，\n我仍能回到自己的目標與節奏。',
-    type: 'scale',
-  },
-  {
-    id: 23,
+    id: 13,
     module: 'investment_anxiety',
     moduleLabel: moduleLabels.investment_anxiety,
     text: '台股創高、新聞一直報、身邊很多人說「再不上車就來不及」。\n\n你通常會：',
@@ -261,14 +185,14 @@ export const questions: Question[] = [
     ],
   },
   {
-    id: 24,
+    id: 14,
     module: 'investment_anxiety',
     moduleLabel: moduleLabels.investment_anxiety,
     text: '我不會把投資當成翻轉人生、逃離焦慮，\n或證明自己沒有輸給別人的唯一方法。',
     type: 'scale',
   },
   {
-    id: 25,
+    id: 15,
     module: 'investment_anxiety',
     moduleLabel: moduleLabels.investment_anxiety,
     text: '我曾經因為怕錯過、怕落後，\n匆忙買進股票、ETF、基金或加碼，\n後來覺得自己太衝動。',
@@ -303,7 +227,7 @@ export const resultTypes: ResultType[] = [
       '會頻繁查看投資資訊',
       '情緒容易跟著市場起伏',
     ],
-    suggestion: '建議先建立穩定的情緒調節機制，可以考慮從較低風險的投資開始，逐步建立對市場波動的適應力。',
+    suggestion: '可以先把會讓你焦慮的情境、資金用途與想問的問題寫清楚，再帶著結果到好理家在慢慢整理。',
   },
   {
     id: 'stressed',
@@ -314,7 +238,7 @@ export const resultTypes: ResultType[] = [
       '希望透過投資改善現況',
       '承受風險的空間較有限',
     ],
-    suggestion: '建議先確保生活基本開銷有足夠緩衝，再考慮投資。急用錢時的投資決定往往不是最好的決定。',
+    suggestion: '可以先把生活基本開銷、近期壓力與可用資源整理出來，再視需要使用好理家在財務健檢或線上諮詢。',
   },
   {
     id: 'fomo',
@@ -325,7 +249,7 @@ export const resultTypes: ResultType[] = [
       '擔心錯過投資機會',
       '決策較容易衝動',
     ],
-    suggestion: '建議先靜下心來思考自己真正的投資目標是什麼，不要因為別人賺錢就急著進場。投資是長期的事。',
+    suggestion: '可以先把「我真正想解決什麼生活問題」寫下來，再用問問 AI 或知識庫把問題釐清，而不是急著做決定。',
   },
   {
     id: 'stable',
@@ -336,7 +260,7 @@ export const resultTypes: ResultType[] = [
       '能保持相對冷靜的心態',
       '決策較為理性客觀',
     ],
-    suggestion: '你已經具備較好的投資心態基礎，可以根據自己的財務狀況，規劃適合的投資配置。',
+    suggestion: '你目前的承受狀態相對穩定，之後可以定期回頭看資金用途、承受範圍與生活條件是否改變。',
   },
 ]
 
@@ -435,7 +359,7 @@ export function analyzeContradictions(scores: ReturnType<typeof calculateScores>
       severity: '高',
       summary: '你面對市場波動時不一定會立刻慌，但目前的財務安全空間可能沒有跟上投資膽量。',
       whyItMatters: '這種狀態最容易在股市熱絡時提高部位；一旦生活支出、收入或市場同時出現變化，就可能被迫在不想賣的時候賣出。',
-      suggestion: '先設定「不能投入投資的錢」與緊急預備金底線，再決定投資部位。你需要先補強客觀承受力，而不是只靠心理撐住。',
+      suggestion: '先把生活必要支出、緊急預備金與投資資金分開寫清楚；如果整理後發現壓力偏高，可以帶著結果回到好理家在做財務健檢或諮詢。',
       signals: [
         `財務安全感 ${scores.financial_security}%`,
         `市場波動反應 ${scores.emotional_response}%`,
@@ -451,7 +375,7 @@ export function analyzeContradictions(scores: ReturnType<typeof calculateScores>
       severity: '高',
       summary: '市場下跌、別人獲利或錯過機會，都可能快速影響你的判斷與行動。',
       whyItMatters: '這不代表你不能投資，而是你需要先分辨：現在是策略在帶路，還是焦慮在催促你進場。',
-      suggestion: '建議先建立「冷靜期」規則，例如重大投資決定至少隔一天、寫下買進理由與可承受虧損，再執行交易。',
+      suggestion: '可以先把測驗結果寫成三個問題：我在怕什麼、我想解決什麼、這筆錢和生活壓力有沒有關係，再用好理家在服務慢慢釐清。',
       signals: [
         `市場波動反應 ${scores.emotional_response}%`,
         `金錢焦慮管理 ${scores.investment_anxiety}%`,
@@ -467,7 +391,7 @@ export function analyzeContradictions(scores: ReturnType<typeof calculateScores>
       severity: '中',
       summary: '你不一定容易恐慌，但投資判斷若缺少商品理解與風險邏輯，穩定心態也可能撐錯方向。',
       whyItMatters: '市場上漲時，冷靜的人也可能因為資訊不足而長期持有不適合自己的標的。',
-      suggestion: '在加碼前，先補上三件事：買進理由、可能虧損原因、什麼情況代表判斷錯了。',
+      suggestion: '先把三件事寫成問題：我買的是什麼、可能因為什麼虧損、哪些情況代表需要重新理解，再帶到問問 AI 或知識庫查清楚。',
       signals: [
         `投資理解程度 ${scores.investment_understanding}%`,
         `心理穩定度 ${indexes.psychologicalStability}%`,
@@ -482,7 +406,7 @@ export function analyzeContradictions(scores: ReturnType<typeof calculateScores>
       severity: '中',
       summary: '目前生活責任、未來支出或支持系統，可能讓你很難長期承受市場低迷。',
       whyItMatters: '很多人真正撐不住的不是股市下跌本身，而是股市下跌剛好遇上生活事件。',
-      suggestion: '先把未來一年可能用到的錢與投資資金分開，並保留足夠現金流，讓投資不成為生活壓力的放大器。',
+      suggestion: '先把未來一年可能用到的錢、生活責任與投資資金分開整理；若壓力不容易釐清，可以使用財務健檢或線上諮詢。',
       signals: [
         `生活安全結構 ${scores.life_stability}%`,
         `金錢焦慮管理 ${scores.investment_anxiety}%`,
@@ -503,7 +427,7 @@ export function analyzeContradictions(scores: ReturnType<typeof calculateScores>
       severity: '低',
       summary: '你的投資心態、財務緩衝與生活責任目前能互相支撐，沒有看到特別明顯的拉扯。',
       whyItMatters: '這代表你比較適合用長期規劃來管理投資，但生活條件、收入或家庭責任改變時，仍要重新確認部位是否合適。',
-      suggestion: '可以先訂好投資比例與檢查時間，例如每半年或每年看一次；如果股票、ETF 或現金比例偏離原本安排太多，再調回來。',
+      suggestion: '可以定期檢查資金用途、生活條件與家庭責任是否改變；如果情境變了，再重新看目前的承受狀態。',
       signals: [
         `客觀承受力 ${indexes.objectiveCapacity}%`,
         `心理穩定度 ${indexes.psychologicalStability}%`,
@@ -518,7 +442,7 @@ export function analyzeContradictions(scores: ReturnType<typeof calculateScores>
     severity: '中',
     summary: '你的風險輪廓不是單一型態，幾個面向都有一點拉扯；先看分數最低的地方就好。',
     whyItMatters: '投資風險通常不是只來自一個弱點，而是財務、情緒、理解與生活壓力在特定時刻交疊。',
-    suggestion: '先從分數最低的面向開始補強；當最低分提高後，再重新檢視投資部位是否適合目前的承受力。',
+    suggestion: '先從分數最低的面向整理一個具體問題；當問題變清楚後，再決定要用財務健檢、問問 AI、工具箱或線上諮詢接著處理。',
     signals: [
       `最低面向 ${Math.min(...Object.values(scores))}%`,
       `客觀承受力 ${indexes.objectiveCapacity}%`,

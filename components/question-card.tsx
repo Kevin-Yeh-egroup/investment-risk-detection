@@ -24,6 +24,7 @@ function OptionButton({
 }) {
   return (
     <motion.button
+      data-testid={`answer-option-${value}`}
       onClick={onSelect}
       animate={selected ? { scale: [1, 0.97, 1.01, 1] } : { scale: 1 }}
       transition={selected ? { duration: 0.22, ease: 'easeOut' } : {}}
@@ -90,6 +91,8 @@ export function QuestionCard({ questionIndex, answer, onAnswer }: QuestionCardPr
   return (
     <AnimatePresence mode="wait">
       <motion.div
+        data-testid="question-card"
+        data-question-index={questionIndex}
         key={question.id}
         initial={{ opacity: 0, x: 50 }}
         animate={{ opacity: 1, x: 0 }}

@@ -66,6 +66,8 @@
 
 若可以使用瀏覽器，agent 必須實際點擊完整流程；若瀏覽器暫時不可用，則先做原始碼與文案層級的模擬測試，並在回報中標明限制。
 
+實際瀏覽器操作測試由 `docs/browser-e2e-testing-agent.md` 定義；需要真實點擊時，優先執行 `npm run test:e2e`，再補上本文件的民眾視角判讀。
+
 ## 完整測試腳本
 
 1. 以第一次進站使用者身分打開首頁。
@@ -116,11 +118,11 @@
 ## Expansion Review Card
 
 - What changed: 新增 project-local 測試 agent 規格，並加入 AI 假扮初次使用者的完整操作測試流程。
-- Why needed: 之後修改問卷時，可用一致的民眾角度判斷興趣、理解度、操作流暢性與服務承接自然度。
+- Why needed: 之後修改問卷時，可用一致的民眾角度判斷興趣、理解度、操作流暢性與服務承接自然度，並可銜接真實瀏覽器 E2E 測試。
 - Owner: Codex project agent。
 - Trigger: 修改首頁、問卷題目、結果頁、CTA 或下一步區塊時。
 - Should not do: 不給投資建議、不代表真實市場調查、不自動外部發布。
-- Proof: 本次已用此規格產生首頁興趣入口優化。
+- Proof: 本次已用此規格產生首頁興趣入口優化，並銜接 `docs/browser-e2e-testing-agent.md` 的 Playwright 瀏覽器測試。
 - Approval: 外部發布、正式市場研究、收集真人資料前需 Kevin 確認。
 - Source of truth: 本檔案。
 - Scope decision: 保持 project-local，不升級成全域 agent 或自動化。

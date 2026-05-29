@@ -349,8 +349,23 @@ export function calculateRiskIndexes(scores: ReturnType<typeof calculateScores>)
   }
 }
 
+const scoreEntries = (scores: ReturnType<typeof calculateScores>) =>
+  moduleOrder.map((key) => ({
+    key,
+    label: moduleLabels[key],
+    score: scores[key],
+  }))
+
 export function analyzeContradictions(scores: ReturnType<typeof calculateScores>): RiskContradiction {
   const indexes = calculateRiskIndexes(scores)
+  const entries = scoreEntries(scores)
+  const sortedEntries = [...entries].sort((a, b) => a.score - b.score)
+  const lowest = sortedEntries[0]
+  const highest = sortedEntries[sortedEntries.length - 1]
+  const average = Math.round(entries.reduce((sum, entry) => sum + entry.score, 0) / entries.length)
+  const below55 = entries.filter((entry) => entry.score < 55)
+  const watchZone = entries.filter((entry) => entry.score >= 55 && entry.score < 60)
+  const gap = highest.score - lowest.score
 
   if (scores.financial_security < 55 && scores.emotional_response >= 60) {
     return {
@@ -414,12 +429,60 @@ export function analyzeContradictions(scores: ReturnType<typeof calculateScores>
     }
   }
 
+  if (below55.length > 0) {
+    return {
+      id: 'clear_capacity_gap',
+      title: '有一個面向出現承受落差',
+      severity: '中',
+      summary: `目前「${lowest.label}」分數低於 55%，比較需要先被看見；這不代表你不能投資，而是這個面向可能會影響你承受波動的方式。`,
+      whyItMatters: '投資風險承受度不只看整體平均，也要看是否有某個面向已經低到可能拖住實際承受力。',
+      suggestion: `可以先把「${lowest.label}」相關的生活情境與想問的問題整理出來，再帶著結果回到好理家在慢慢釐清。`,
+      signals: [
+        `${lowest.label} ${lowest.score}%`,
+        `整體平均 ${average}%`,
+        `客觀承受力 ${indexes.objectiveCapacity}%`,
+      ],
+    }
+  }
+
+  if (watchZone.length === 1) {
+    return {
+      id: 'single_attention_area',
+      title: '有一個面向需要多留意',
+      severity: '低',
+      summary: `整體沒有出現明顯風險矛盾，但「${watchZone[0].label}」已接近留意區，可以先把它當成觀察入口。`,
+      whyItMatters: '單一面向略低不代表整體承受狀態不好；重點是看它會不會在特定情境下影響你的判斷或生活壓力。',
+      suggestion: `可以先針對「${watchZone[0].label}」整理一個具體問題，再決定要用財務健檢、問問 AI、工具箱或線上諮詢接著處理。`,
+      signals: [
+        `${watchZone[0].label} ${watchZone[0].score}%`,
+        `整體平均 ${average}%`,
+        `目前沒有看到明顯風險矛盾`,
+      ],
+    }
+  }
+
+  if (watchZone.length >= 2) {
+    return {
+      id: 'light_tension',
+      title: '幾個面向有輕度拉扯',
+      severity: '低',
+      summary: '目前不是單一明顯風險矛盾，而是幾個面向接近留意區；可以先看哪一個最影響你的生活與判斷。',
+      whyItMatters: '投資風險有時不是單一弱點，而是幾個中等壓力在特定時刻一起出現。',
+      suggestion: '可以先從最貼近日常壓力的面向開始整理問題；不需要急著把它解讀成投資配置或商品選擇。',
+      signals: [
+        `留意面向 ${watchZone.map((entry) => `${entry.label} ${entry.score}%`).join('、')}`,
+        `整體平均 ${average}%`,
+        `目前沒有看到明顯風險矛盾`,
+      ],
+    }
+  }
+
   if (
-    scores.financial_security >= 65 &&
-    scores.emotional_response >= 65 &&
-    scores.investment_understanding >= 65 &&
-    scores.life_stability >= 65 &&
-    scores.investment_anxiety >= 65
+    scores.financial_security >= 75 &&
+    scores.emotional_response >= 75 &&
+    scores.investment_understanding >= 75 &&
+    scores.life_stability >= 75 &&
+    scores.investment_anxiety >= 75
   ) {
     return {
       id: 'aligned_rational',
@@ -436,15 +499,63 @@ export function analyzeContradictions(scores: ReturnType<typeof calculateScores>
     }
   }
 
+  if (average >= 75 && lowest.score >= 60 && gap >= 20) {
+    return {
+      id: 'stable_with_observation',
+      title: '整體狀態穩定，但有一個面向值得觀察',
+      severity: '低',
+      summary: `你的多數面向都相對穩定，目前沒有看到明顯風險矛盾。不過「${lowest.label}」相對低一些，可以當成接下來整理問題的入口。`,
+      whyItMatters: '投資風險承受度不只看最低分，也要看整體支撐是否足夠。這個結果比較像是整體有支撐，但特定情境仍可能牽動你。',
+      suggestion: `可以先想想：「${lowest.label}」是在什麼情境下被觸發？再把這個問題帶回好理家在財務健檢、問問 AI 或工具箱慢慢整理。`,
+      signals: [
+        `${lowest.label} ${lowest.score}%`,
+        `整體平均 ${average}%`,
+        `目前沒有看到明顯風險矛盾`,
+      ],
+    }
+  }
+
+  if (average >= 65 && lowest.score >= 60) {
+    return {
+      id: 'generally_stable',
+      title: '大致穩定，可先看相對低分面向',
+      severity: '低',
+      summary: '目前沒有看到明顯承受落差；如果要更了解自己，可以先從分數相對低的面向整理一個具體問題。',
+      whyItMatters: '分數相對低不等於有問題。它比較像是提醒你：下一步可以從哪裡開始理解自己的投資節奏與生活壓力。',
+      suggestion: `可以先從「${lowest.label}」開始，整理一個你想帶回好理家在釐清的問題。`,
+      signals: [
+        `${lowest.label} ${lowest.score}%`,
+        `整體平均 ${average}%`,
+        `目前沒有看到明顯風險矛盾`,
+      ],
+    }
+  }
+
+  if (lowest.score >= 60) {
+    return {
+      id: 'moderate_observation',
+      title: '整體仍在觀察區，可以先整理現況',
+      severity: '低',
+      summary: '目前沒有看到明顯風險矛盾，但幾個面向都還有整理空間；重點不是急著調整投資，而是先把生活脈絡看清楚。',
+      whyItMatters: '當各面向都落在中間區間時，結果比較適合用來整理現況，而不是下定論。',
+      suggestion: '可以先挑一個最貼近你最近生活壓力的面向，帶回好理家在服務慢慢釐清。',
+      signals: [
+        `${lowest.label} ${lowest.score}%`,
+        `整體平均 ${average}%`,
+        `目前沒有看到明顯風險矛盾`,
+      ],
+    }
+  }
+
   return {
     id: 'mixed_awareness',
-    title: '目前有些輕度拉扯，可先補強最低分面向',
+    title: '目前有些面向需要一起整理',
     severity: '中',
-    summary: '你的風險輪廓不是單一型態，幾個面向都有一點拉扯；先看分數最低的地方就好。',
+    summary: '你的風險輪廓不是單一型態，幾個面向都有一點需要釐清；先看哪個面向最貼近最近的生活壓力即可。',
     whyItMatters: '投資風險通常不是只來自一個弱點，而是財務、情緒、理解與生活壓力在特定時刻交疊。',
-    suggestion: '先從分數最低的面向整理一個具體問題；當問題變清楚後，再決定要用財務健檢、問問 AI、工具箱或線上諮詢接著處理。',
+    suggestion: '先整理一個最想問清楚的問題；當問題變清楚後，再決定要用財務健檢、問問 AI、工具箱或線上諮詢接著處理。',
     signals: [
-      `最低面向 ${Math.min(...Object.values(scores))}%`,
+      `${lowest.label} ${lowest.score}%`,
       `客觀承受力 ${indexes.objectiveCapacity}%`,
       `心理穩定度 ${indexes.psychologicalStability}%`,
     ],

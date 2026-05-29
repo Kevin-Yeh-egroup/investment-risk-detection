@@ -122,6 +122,15 @@ const radarDimensionLabels: Record<(typeof moduleOrder)[number], string> = {
   investment_anxiety: '焦慮動機',
 }
 
+const statusResultIds = [
+  'aligned_rational',
+  'stable_with_observation',
+  'generally_stable',
+  'moderate_observation',
+  'single_attention_area',
+  'light_tension',
+]
+
 export function ResultSection({ answers, onRestart }: ResultSectionProps) {
   const isMobile = useIsMobile()
   const scores = calculateScores(answers)
@@ -129,18 +138,32 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
   const contradiction = analyzeContradictions(scores)
   const resultType = determineResultType(scores)
   const resultIllustration = resultIllustrations[resultType.id]
-  const hasClearContradiction = !['aligned_rational', 'mixed_awareness'].includes(contradiction.id)
-  const resultLabel = hasClearContradiction ? '你的主要風險矛盾' : '你的主要承受狀態'
-  const resultBadge = contradiction.id === 'aligned_rational'
-    ? '承受狀態：相對穩定'
-    : contradiction.id === 'mixed_awareness'
-      ? '承受狀態：有輕度拉扯'
-      : `風險提醒：${contradiction.severity}`
-  const plainExplanation = contradiction.id === 'aligned_rational'
-    ? '這次結果顯示你的承受狀態相對穩定：投資心態、財務緩衝與生活條件目前能互相支撐。'
-    : contradiction.id === 'mixed_awareness'
-      ? '這次沒有單一很突出的風險矛盾；比較像是幾個面向都有一點拉扯，可以先從最低分的地方補強。'
-      : '這裡的風險矛盾，指的是你以為自己能承擔的投資風險，和財務、心理或生活實際能承受的後果之間有落差。'
+  const hasClearContradiction = !statusResultIds.includes(contradiction.id)
+  const resultTone = hasClearContradiction
+    ? contradiction.severity === '高'
+      ? 'high'
+      : 'caution'
+    : 'status'
+  const ResultIcon = hasClearContradiction ? AlertTriangle : Sparkles
+  const resultLabel = hasClearContradiction ? '你的主要風險矛盾' : '你的整體承受狀態'
+  const resultBadge = hasClearContradiction
+    ? `風險提醒：${contradiction.severity}`
+    : contradiction.id === 'aligned_rational'
+      ? '狀態整理：相對穩定'
+      : contradiction.id === 'stable_with_observation'
+      ? '狀態整理：有觀察面向'
+      : contradiction.id === 'generally_stable'
+      ? '狀態整理：大致穩定'
+      : contradiction.id === 'single_attention_area'
+      ? '狀態整理：單一面向留意'
+      : contradiction.id === 'light_tension'
+      ? '狀態整理：幾個面向需留意'
+      : '狀態整理：觀察區'
+  const plainExplanation = hasClearContradiction
+    ? '這裡的風險矛盾，指的是你以為自己能承擔的投資風險，和財務、心理或生活實際能承受的後果之間有落差。'
+    : contradiction.id === 'aligned_rational'
+      ? '這次結果顯示你的承受狀態相對穩定：投資心態、財務緩衝與生活條件目前能互相支撐。'
+      : '這次結果先看整體承受狀態，再看相對值得觀察的面向；分數相對低不等於明顯風險矛盾。'
 
   const radarData = moduleOrder.map((module) => ({
     dimension: radarDimensionLabels[module],
@@ -168,39 +191,41 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
           </p>
         </motion.div>
 
-        {/* Risk Contradiction */}
+        {/* Result Summary */}
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ delay: 0.2, duration: 0.6 }}
           className={`relative overflow-hidden rounded-2xl border mb-8 ${
-            contradiction.severity === '高'
+            resultTone === 'high'
               ? 'border-orange-200 bg-orange-50/60'
-              : contradiction.severity === '中'
+              : resultTone === 'caution'
               ? 'border-primary/25 bg-primary/5'
               : 'border-border bg-card'
           }`}
         >
-          {/* Left severity band */}
+          {/* Left status band */}
           <div
             className={`absolute left-0 top-0 bottom-0 w-1.5 rounded-l-2xl ${
-              contradiction.severity === '高'
+              resultTone === 'high'
                 ? 'bg-orange-400'
-                : contradiction.severity === '中'
+                : resultTone === 'caution'
                 ? 'bg-primary/60'
-                : 'bg-muted-foreground/40'
+                : 'bg-primary/30'
             }`}
           />
           <div className="p-8 md:p-10 pl-10 md:pl-12">
           <div className="text-center mb-8">
             <span
               className={`mx-auto mb-5 flex h-14 w-14 items-center justify-center rounded-2xl ${
-                contradiction.severity === '高'
+                resultTone === 'high'
                   ? 'bg-orange-100 text-orange-500'
-                  : 'bg-primary/10 text-primary'
+                  : resultTone === 'caution'
+                  ? 'bg-primary/10 text-primary'
+                  : 'bg-secondary text-primary'
               }`}
             >
-              <AlertTriangle className="h-7 w-7" />
+              <ResultIcon className="h-7 w-7" />
             </span>
             <span className="text-xs text-primary tracking-widest uppercase mb-3 block">
               {resultLabel}
@@ -208,9 +233,9 @@ export function ResultSection({ answers, onRestart }: ResultSectionProps) {
             <h2 className="text-2xl md:text-3xl font-light">{contradiction.title}</h2>
             <span
               className={`mt-4 inline-flex rounded-full px-4 py-2 text-xs font-medium ${
-                contradiction.severity === '高'
+                resultTone === 'high'
                   ? 'bg-orange-100 text-orange-600'
-                  : contradiction.severity === '中'
+                  : resultTone === 'caution'
                   ? 'bg-primary/10 text-primary'
                   : 'bg-secondary text-muted-foreground'
               }`}

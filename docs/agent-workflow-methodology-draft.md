@@ -72,6 +72,8 @@
 - 回饋要用 rubric 輸出。
 - 修改後要有驗證證據。
 
+若要把這套方法升級成可跨專案使用的測試系統，請先參考 `docs/global-testing-agent-os-design.md`。該文件定義了依測試主題召集不同 agent、建立知識包、使用真瀏覽器批次測試、多輪回饋優化與持續學習 approval gate 的設計。
+
 暫時不應放全域的部分：
 - 每次都要大量 web search。
 - 每次都要啟動多個 subagent。
@@ -81,7 +83,7 @@
 ## Expansion Review Card
 
 - What changed: 新增 project-local agent 工作流方法論草案。
-- Why needed: 先把逐字稿中的 agent 方法整理成可審核流程，避免直接升級成過重全域規則。
+- Why needed: 先把逐字稿中的 agent 方法整理成可審核流程，避免直接升級成過重全域規則；若要全域化，需銜接 `docs/global-testing-agent-os-design.md` 的治理設計。
 - Owner: Codex project agent。
 - Trigger: Kevin 要把 agent 方法論、persona 測試或多 agent 工作流升級成全域前。
 - Should not do: 不自動升級全域、不自動建立 automation、不把虛擬 persona 當成真實用戶研究。
